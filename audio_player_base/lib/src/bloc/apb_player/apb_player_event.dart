@@ -1,8 +1,9 @@
 part of 'apb_player_bloc.dart';
 
 @freezed
-class ApbPlayerEvent with _$ApbPlayerEvent {
+abstract class ApbPlayerEvent with _$ApbPlayerEvent {
   const factory ApbPlayerEvent.play() = _Play;
+  const factory ApbPlayerEvent.playCollection(ApbPlayablePlaylist playlist, int index) = _PlayCollection;
   const factory ApbPlayerEvent.pause() = _Pause;
   const factory ApbPlayerEvent.resume() = _Resume;
   const factory ApbPlayerEvent.stop() = _Stop;

@@ -13,7 +13,7 @@ class ApbPlayerStateStream {
 }
 
 @freezed
-class ApbPlayerState with _$ApbPlayerState {
+abstract class ApbPlayerState with _$ApbPlayerState {
   const factory ApbPlayerState.initial() = _Initial;
   const factory ApbPlayerState.startup(ApbPlayableAudio audio) = _Startup;
   const factory ApbPlayerState.loading(ApbPlayableAudio audio, {required ApbPlayerStateStream playerStream}) = _Loading;

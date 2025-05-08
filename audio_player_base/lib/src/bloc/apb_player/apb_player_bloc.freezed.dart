@@ -20,6 +20,8 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -39,6 +41,7 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -58,6 +61,7 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -78,6 +82,7 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -92,6 +97,7 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -106,6 +112,7 @@ mixin _$ApbPlayerEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -184,6 +191,8 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -207,6 +216,7 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -230,6 +240,7 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -257,6 +268,7 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -275,6 +287,7 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -293,6 +306,7 @@ class _$PlayImpl implements _Play {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -314,6 +328,239 @@ class _$PlayImpl implements _Play {
 
 abstract class _Play implements ApbPlayerEvent {
   const factory _Play() = _$PlayImpl;
+}
+
+/// @nodoc
+abstract class _$$PlayCollectionImplCopyWith<$Res> {
+  factory _$$PlayCollectionImplCopyWith(
+    _$PlayCollectionImpl value,
+    $Res Function(_$PlayCollectionImpl) then,
+  ) = __$$PlayCollectionImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ApbPlayablePlaylist playlist, int index});
+}
+
+/// @nodoc
+class __$$PlayCollectionImplCopyWithImpl<$Res>
+    extends _$ApbPlayerEventCopyWithImpl<$Res, _$PlayCollectionImpl>
+    implements _$$PlayCollectionImplCopyWith<$Res> {
+  __$$PlayCollectionImplCopyWithImpl(
+    _$PlayCollectionImpl _value,
+    $Res Function(_$PlayCollectionImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ApbPlayerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? playlist = null, Object? index = null}) {
+    return _then(
+      _$PlayCollectionImpl(
+        null == playlist
+            ? _value.playlist
+            : playlist // ignore: cast_nullable_to_non_nullable
+                as ApbPlayablePlaylist,
+        null == index
+            ? _value.index
+            : index // ignore: cast_nullable_to_non_nullable
+                as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$PlayCollectionImpl implements _PlayCollection {
+  const _$PlayCollectionImpl(this.playlist, this.index);
+
+  @override
+  final ApbPlayablePlaylist playlist;
+  @override
+  final int index;
+
+  @override
+  String toString() {
+    return 'ApbPlayerEvent.playCollection(playlist: $playlist, index: $index)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PlayCollectionImpl &&
+            (identical(other.playlist, playlist) ||
+                other.playlist == playlist) &&
+            (identical(other.index, index) || other.index == index));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, playlist, index);
+
+  /// Create a copy of ApbPlayerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PlayCollectionImplCopyWith<_$PlayCollectionImpl> get copyWith =>
+      __$$PlayCollectionImplCopyWithImpl<_$PlayCollectionImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
+    required TResult Function() pause,
+    required TResult Function() resume,
+    required TResult Function() stop,
+    required TResult Function() next,
+    required TResult Function() prev,
+    required TResult Function() replay,
+    required TResult Function(Duration position) seek,
+    required TResult Function(
+      Duration position,
+      Duration duration,
+      Duration skipDuration,
+    )
+    skip,
+    required TResult Function(double speed) toggleSpeed,
+    required TResult Function(LoopMode loopMode) toggleLoop,
+  }) {
+    return playCollection(playlist, index);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
+    TResult? Function()? pause,
+    TResult? Function()? resume,
+    TResult? Function()? stop,
+    TResult? Function()? next,
+    TResult? Function()? prev,
+    TResult? Function()? replay,
+    TResult? Function(Duration position)? seek,
+    TResult? Function(
+      Duration position,
+      Duration duration,
+      Duration skipDuration,
+    )?
+    skip,
+    TResult? Function(double speed)? toggleSpeed,
+    TResult? Function(LoopMode loopMode)? toggleLoop,
+  }) {
+    return playCollection?.call(playlist, index);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
+    TResult Function()? pause,
+    TResult Function()? resume,
+    TResult Function()? stop,
+    TResult Function()? next,
+    TResult Function()? prev,
+    TResult Function()? replay,
+    TResult Function(Duration position)? seek,
+    TResult Function(
+      Duration position,
+      Duration duration,
+      Duration skipDuration,
+    )?
+    skip,
+    TResult Function(double speed)? toggleSpeed,
+    TResult Function(LoopMode loopMode)? toggleLoop,
+    required TResult orElse(),
+  }) {
+    if (playCollection != null) {
+      return playCollection(playlist, index);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
+    required TResult Function(_Pause value) pause,
+    required TResult Function(_Resume value) resume,
+    required TResult Function(_Stop value) stop,
+    required TResult Function(_Next value) next,
+    required TResult Function(_Prev value) prev,
+    required TResult Function(_Replay value) replay,
+    required TResult Function(_Seek value) seek,
+    required TResult Function(_Skip value) skip,
+    required TResult Function(_ToggleSpeed value) toggleSpeed,
+    required TResult Function(_ToggleLoop value) toggleLoop,
+  }) {
+    return playCollection(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
+    TResult? Function(_Pause value)? pause,
+    TResult? Function(_Resume value)? resume,
+    TResult? Function(_Stop value)? stop,
+    TResult? Function(_Next value)? next,
+    TResult? Function(_Prev value)? prev,
+    TResult? Function(_Replay value)? replay,
+    TResult? Function(_Seek value)? seek,
+    TResult? Function(_Skip value)? skip,
+    TResult? Function(_ToggleSpeed value)? toggleSpeed,
+    TResult? Function(_ToggleLoop value)? toggleLoop,
+  }) {
+    return playCollection?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
+    TResult Function(_Pause value)? pause,
+    TResult Function(_Resume value)? resume,
+    TResult Function(_Stop value)? stop,
+    TResult Function(_Next value)? next,
+    TResult Function(_Prev value)? prev,
+    TResult Function(_Replay value)? replay,
+    TResult Function(_Seek value)? seek,
+    TResult Function(_Skip value)? skip,
+    TResult Function(_ToggleSpeed value)? toggleSpeed,
+    TResult Function(_ToggleLoop value)? toggleLoop,
+    required TResult orElse(),
+  }) {
+    if (playCollection != null) {
+      return playCollection(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PlayCollection implements ApbPlayerEvent {
+  const factory _PlayCollection(
+    final ApbPlayablePlaylist playlist,
+    final int index,
+  ) = _$PlayCollectionImpl;
+
+  ApbPlayablePlaylist get playlist;
+  int get index;
+
+  /// Create a copy of ApbPlayerEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PlayCollectionImplCopyWith<_$PlayCollectionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -360,6 +607,8 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -383,6 +632,7 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -406,6 +656,7 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -433,6 +684,7 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -451,6 +703,7 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -469,6 +722,7 @@ class _$PauseImpl implements _Pause {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -536,6 +790,8 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -559,6 +815,7 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -582,6 +839,7 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -609,6 +867,7 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -627,6 +886,7 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -645,6 +905,7 @@ class _$ResumeImpl implements _Resume {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -710,6 +971,8 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -733,6 +996,7 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -756,6 +1020,7 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -783,6 +1048,7 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -801,6 +1067,7 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -819,6 +1086,7 @@ class _$StopImpl implements _Stop {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -884,6 +1152,8 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -907,6 +1177,7 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -930,6 +1201,7 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -957,6 +1229,7 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -975,6 +1248,7 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -993,6 +1267,7 @@ class _$NextImpl implements _Next {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -1058,6 +1333,8 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -1081,6 +1358,7 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -1104,6 +1382,7 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -1131,6 +1410,7 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -1149,6 +1429,7 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -1167,6 +1448,7 @@ class _$PrevImpl implements _Prev {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -1234,6 +1516,8 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -1257,6 +1541,7 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -1280,6 +1565,7 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -1307,6 +1593,7 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -1325,6 +1612,7 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -1343,6 +1631,7 @@ class _$ReplayImpl implements _Replay {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -1436,6 +1725,8 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -1459,6 +1750,7 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -1482,6 +1774,7 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -1509,6 +1802,7 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -1527,6 +1821,7 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -1545,6 +1840,7 @@ class _$SeekImpl implements _Seek {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -1667,6 +1963,8 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -1690,6 +1988,7 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -1713,6 +2012,7 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -1740,6 +2040,7 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -1758,6 +2059,7 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -1776,6 +2078,7 @@ class _$SkipImpl implements _Skip {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -1884,6 +2187,8 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -1907,6 +2212,7 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -1930,6 +2236,7 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -1957,6 +2264,7 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -1975,6 +2283,7 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -1993,6 +2302,7 @@ class _$ToggleSpeedImpl implements _ToggleSpeed {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,
@@ -2096,6 +2406,8 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() play,
+    required TResult Function(ApbPlayablePlaylist playlist, int index)
+    playCollection,
     required TResult Function() pause,
     required TResult Function() resume,
     required TResult Function() stop,
@@ -2119,6 +2431,7 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? play,
+    TResult? Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult? Function()? pause,
     TResult? Function()? resume,
     TResult? Function()? stop,
@@ -2142,6 +2455,7 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? play,
+    TResult Function(ApbPlayablePlaylist playlist, int index)? playCollection,
     TResult Function()? pause,
     TResult Function()? resume,
     TResult Function()? stop,
@@ -2169,6 +2483,7 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Play value) play,
+    required TResult Function(_PlayCollection value) playCollection,
     required TResult Function(_Pause value) pause,
     required TResult Function(_Resume value) resume,
     required TResult Function(_Stop value) stop,
@@ -2187,6 +2502,7 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Play value)? play,
+    TResult? Function(_PlayCollection value)? playCollection,
     TResult? Function(_Pause value)? pause,
     TResult? Function(_Resume value)? resume,
     TResult? Function(_Stop value)? stop,
@@ -2205,6 +2521,7 @@ class _$ToggleLoopImpl implements _ToggleLoop {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Play value)? play,
+    TResult Function(_PlayCollection value)? playCollection,
     TResult Function(_Pause value)? pause,
     TResult Function(_Resume value)? resume,
     TResult Function(_Stop value)? stop,

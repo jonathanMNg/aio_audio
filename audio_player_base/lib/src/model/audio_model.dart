@@ -64,10 +64,10 @@ abstract class ApbPlayablePlaylist {
 class ApbUrlPlayableAudio extends ApbPlayableAudio {
   ApbUrlPlayableAudio({
     required super.id,
+    super.sourceId,
     required super.name,
     required super.fileUrl,
     super.imageUrl,
-    super.sourceId,
     super.lastPosInSec,
     super.durationInSec,
     super.contributors,
@@ -82,11 +82,11 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
 class ApbFilePlayableAudio extends ApbPlayableAudio {
   ApbFilePlayableAudio({
     required super.id,
+    super.sourceId,
     required super.name,
     required this.savedDir,
     required super.filePath,
     super.imageUrl,
-    super.sourceId,
     super.lastPosInSec,
     super.durationInSec,
     super.contributors,
@@ -101,10 +101,10 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 class ApbAssetPlayableAudio extends ApbPlayableAudio {
   ApbAssetPlayableAudio({
     required super.id,
+    super.sourceId,
     required super.name,
     required this.assetStr,
     super.imageUrl,
-    super.sourceId,
     super.lastPosInSec,
     super.durationInSec,
     super.contributors,
@@ -120,10 +120,10 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
 class ApbYtPlayableAudio extends ApbPlayableAudio {
   ApbYtPlayableAudio({
     required super.id,
+    super.sourceId,
     required super.name,
     required this.ytId,
     super.imageUrl,
-    super.sourceId,
     super.lastPosInSec,
     super.durationInSec,
     super.contributors,
@@ -156,5 +156,3 @@ class ApbYtPlayableAudio extends ApbPlayableAudio {
   final String ytId;
 
 }
-
-//

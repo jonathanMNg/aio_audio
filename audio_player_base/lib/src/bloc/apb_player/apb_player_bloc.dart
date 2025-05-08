@@ -11,12 +11,13 @@ part 'apb_player_state.dart';
 part 'apb_player_bloc.freezed.dart';
 
 
-class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
+abstract class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
   final AudioPlayerHandler _audioPlayerService = GetIt.I<AudioPlayerHandler>();
 
   ApbPlayerBloc() : super(const ApbPlayerState.initial()) {
     on<ApbPlayerEvent>((event, emit) async {
 
+      final playerHandler = AudioPlayerHandler();
       Future<void> play() async {
         // await _audioPlayerService.init();
         // add(PlayerEvent.playCollection(AppAudioCollection(audios: [audio]), 0));
@@ -73,6 +74,11 @@ class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
         await _audioPlayerService.audioPlayer!.seek(const Duration(seconds: 0), index: 0);
       }
 
+      Future<void> playCollection(ApbPlayablePlaylist playlist, int index) async {
+        await playerHandler.init();
+
+      }
+
       await event.when(
           play: play,
           pause: pause,
@@ -85,7 +91,7 @@ class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
           toggleSpeed: toggleSpeed,
           toggleLoop: toggleLoop,
           replay: replay,
-
+          playCollection: playCollection
       );
     });
   }
