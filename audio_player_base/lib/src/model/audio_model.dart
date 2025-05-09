@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-
-import '../service/yt_service.dart';
 
 enum ApbPlayableFileType { file, url, yt, asset }
 
@@ -16,8 +13,9 @@ abstract class ApbPlayableAudio {
   final String? imageUrl;
   final String? fileUrl;
   final String? filePath;
-  final int? lastPosInSec;
-  final int? durationInSec;
+  final Duration? position;
+  final Duration? duration;
+  final DateTime? createdAt;
   final ApbPlayableFileType? fileType;
   final List<String>? contributors;
 
@@ -28,19 +26,24 @@ abstract class ApbPlayableAudio {
     this.imageUrl,
     this.fileUrl,
     this.filePath,
-    this.lastPosInSec,
-    this.durationInSec,
+    this.position,
+    this.duration,
     this.fileType,
     this.playlistId,
-    this.sourceId
+    this.sourceId,
+    this.createdAt,
   });
 
   AudioSource get audioSource;
   MediaItem get tag => MediaItem(id: sourceId ?? id!, title: name!, artist: contributorsToString, artUri: imageUrl != null ? Uri.parse(imageUrl!) : null);
   String? get contributorsToString => contributors?.join(', ');
+  double? get progress {
+    if (duration == null) return null;
+    return position != null ? position!.inSeconds / duration!.inSeconds : 0;
+  }
 }
 
-abstract class ApbPlayablePlaylist {
+class ApbPlayablePlaylist {
   final String? id;
   final String? name;
   final String? imageUrl;
@@ -53,8 +56,7 @@ abstract class ApbPlayablePlaylist {
 
   ApbPlayablePlaylist({this.shouldHide, this.audios, this.lastUpdated, this.lastPlayed, this.id, this.name, this.imageUrl, this.desc, this.contributors});
 
-  int get count;
-  Duration get duration => Duration(seconds: audios?.fold(0,(prev, e) => (prev ?? 0) + (e.durationInSec ?? 0)) ?? 0);
+  int get count => audios?.length ?? 0;
   DateTime get lastActive => (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch < _lastUpdated.millisecondsSinceEpoch ? _lastUpdated : lastPlayed!;
 
   DateTime get _lastUpdated => lastUpdated!;
@@ -68,10 +70,11 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
     required super.name,
     required super.fileUrl,
     super.imageUrl,
-    super.lastPosInSec,
-    super.durationInSec,
+    super.position,
+    super.duration,
     super.contributors,
-    super.playlistId
+    super.playlistId,
+    super.createdAt
 }): super(filePath: null, fileType: ApbPlayableFileType.url);
 
   @override
@@ -79,6 +82,7 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
     return ProgressiveAudioSource(Uri.parse(fileUrl!), tag: tag);
   }
 }
+
 class ApbFilePlayableAudio extends ApbPlayableAudio {
   ApbFilePlayableAudio({
     required super.id,
@@ -87,10 +91,11 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
     required this.savedDir,
     required super.filePath,
     super.imageUrl,
-    super.lastPosInSec,
-    super.durationInSec,
+    super.position,
+    super.duration,
     super.contributors,
-    super.playlistId
+    super.playlistId,
+    super.createdAt
   }): super(fileUrl: null, fileType: ApbPlayableFileType.file);
   @override
   AudioSource get audioSource {
@@ -105,10 +110,11 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
     required super.name,
     required this.assetStr,
     super.imageUrl,
-    super.lastPosInSec,
-    super.durationInSec,
+    super.duration,
+    super.position,
     super.contributors,
-    super.playlistId
+    super.playlistId,
+    super.createdAt
   }): super(fileUrl: null, filePath: null, fileType: ApbPlayableFileType.asset);
   @override
   AudioSource get audioSource {
@@ -117,42 +123,42 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
   final String assetStr;
 }
 
-class ApbYtPlayableAudio extends ApbPlayableAudio {
-  ApbYtPlayableAudio({
-    required super.id,
-    super.sourceId,
-    required super.name,
-    required this.ytId,
-    super.imageUrl,
-    super.lastPosInSec,
-    super.durationInSec,
-    super.contributors,
-    super.playlistId
-  }): super(fileUrl: null, filePath: null, fileType: ApbPlayableFileType.asset);
-  @override
-  AudioSource get audioSource {
-    return ResolvingYtAudioSource(uniqueId: ytId, resolveSoundUrl: (ytId) async {
-      Uri? audioUri;
-      final yt = YtExplodeService().ytExplode;
-      if (Platform.isIOS) {
-        final manifest = await yt.videos.streamsClient.getManifest(ytId, ytClients: [YoutubeApiClient.ios]);
-        final audioManifest = manifest.audio.withHighestBitrate();
-        final container = audioManifest.container;
-        if(container.toString() == 'webm') {
-          audioUri = manifest.muxed.withHighestBitrate().url;
-        }
-        else {
-          audioUri = audioManifest.url;
-        }
-      } else {
-        final manifest = await yt.videos.streamsClient.getManifest(ytId);
-        final audioManifest = manifest.audioOnly.withHighestBitrate();
-        audioUri = audioManifest.url;
-      }
-
-      return audioUri;
-    }, tag: tag);
-  }
-  final String ytId;
-
-}
+// class ApbYtPlayableAudio extends ApbPlayableAudio {
+//   ApbYtPlayableAudio({
+//     required super.id,
+//     super.sourceId,
+//     required super.name,
+//     required this.ytId,
+//     super.imageUrl,
+//     super.lastPosInSec,
+//     super.durationInSec,
+//     super.contributors,
+//     super.playlistId
+//   }): super(fileUrl: null, filePath: null, fileType: ApbPlayableFileType.asset);
+//   @override
+//   AudioSource get audioSource {
+//     return ResolvingYtAudioSource(uniqueId: ytId, resolveSoundUrl: (ytId) async {
+//       Uri? audioUri;
+//       final yt = YtExplodeService().ytExplode;
+//       if (Platform.isIOS) {
+//         final manifest = await yt.videos.streamsClient.getManifest(ytId, ytClients: [YoutubeApiClient.ios]);
+//         final audioManifest = manifest.audio.withHighestBitrate();
+//         final container = audioManifest.container;
+//         if(container.toString() == 'webm') {
+//           audioUri = manifest.muxed.withHighestBitrate().url;
+//         }
+//         else {
+//           audioUri = audioManifest.url;
+//         }
+//       } else {
+//         final manifest = await yt.videos.streamsClient.getManifest(ytId);
+//         final audioManifest = manifest.audioOnly.withHighestBitrate();
+//         audioUri = audioManifest.url;
+//       }
+//
+//       return audioUri;
+//     }, tag: tag);
+//   }
+//   final String ytId;
+//
+// }

@@ -11,6 +11,10 @@ abstract interface class ApbAudioProvider<T extends ApbPlayableAudio> {
     throw UnimplementedError();
   }
 
+  Future<T> get(String audioId) {
+    throw UnimplementedError();
+  }
+
   Future<List<T>> searchAudios(String query) {
     throw UnimplementedError();
   }

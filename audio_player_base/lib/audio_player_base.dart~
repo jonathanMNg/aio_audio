@@ -3,5 +3,3 @@ export 'src/builder/stream_builder.dart';
 export 'src/model/audio_model.dart';
 export 'src/player/audio_player_handler.dart';
 export 'src/service/yt_service.dart';
-export 'src/component/component.dart';
-export 'src/repository/repository.dart';

@@ -17,10 +17,10 @@ dependencies:
     path: ../../just_audio/just_audio_background
   flutter_bloc: ^9.1.1
   freezed_annotation: ^2.4.4
+  equatable: ^2.0.7
 
   rxdart: ^0.28.0
   get_it: ^8.0.3
-  youtube_explode_dart: ^2.4.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0

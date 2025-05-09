@@ -1,5 +1,10 @@
+import 'package:example/example_audio_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_player_base/audio_player_base.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'example_playlist_provider.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'mock_audio_db.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,18 +15,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (context) => ApbPlayerBloc(
+                audioProvider: ExampleAudioProvider(),
+                playlistProvider: ExamplePlaylistProvider(),
+              ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        ),
+        home: const MyHomePage(title: 'Audio Player Demo'),
       ),
-      home: const MyHomePage(title: 'Audio Player Demo'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -29,32 +46,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<ApbUrlPlayableAudio> audioList = [
-    ApbUrlPlayableAudio(
-      id: '1',
-      name: 'Sample Audio 1',
-      fileUrl: 'https://jnapp2.b-cdn.net/Nhac-Phat-Giao/bat-nha-ba-la-mat-da-tam-kinh-quynh-trang.mp3',
-      imageUrl: 'https://res.cloudinary.com/jnappdev/image/upload/v1684756638/kinhtritung/images/Nghi_Th%E1%BB%A9c_S%C3%A1m_H%E1%BB%91i_S%C3%A1u_C%C4%83n.jpg',
-      contributors: ['Artist 1'],
-    ),
-    ApbUrlPlayableAudio(
-      id: '2',
-      name: 'Sample Audio 2',
-      fileUrl: 'https://jnapp2.b-cdn.net/Nhac-Phat-Giao/chu-dai-bi-tieng-viet-ngan-tay-kim-linh.mp3',
-      imageUrl: 'https://res.cloudinary.com/jnappdev/image/upload/v1682510748/kinhtritung/images/nhac_thien.jpg',
-      contributors: ['Artist 2'],
-    ),
-    ApbUrlPlayableAudio(
-      id: '3',
-      name: 'Sample Audio 3',
-      fileUrl: 'https://jnapp2.b-cdn.net/Nhac-Phat-Giao/luat-doi-quynh-trang.mp3',
-      imageUrl: 'https://res.cloudinary.com/jnappdev/image/upload/v1682509536/kinhtritung/images/chu_dai_bi_nhac_hoa.jpg',
-      contributors: ['Artist 3'],
-    ),
-  ];
-
   void _playAudio(ApbUrlPlayableAudio audio) {
-    // TODO: Implement audio playback functionality
+    context.read<ApbPlayerBloc>().add(ApbPlayAudioEvent(audio));
+  }
+
+  void _playPlaylist(ApbPlayablePlaylist playlist) {
+    context.read<ApbPlayerBloc>().add(ApbPlayPlaylistEvent(playlist));
   }
 
   @override
@@ -64,30 +61,126 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-        itemCount: audioList.length,
-        itemBuilder: (context, index) {
-          final audio = audioList[index];
-          return ListTile(
-            leading: audio.imageUrl != null
-                ? Image.network(
-                    audio.imageUrl!,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.music_note);
+      body: Column(
+        children: [
+          Row(
+            children: [
+              ApbPrevWidget(),
+              ApbPlayPauseWidget(
+                playWidget: IconButton(
+                  onPressed: () {
+                    _playPlaylist(mockPlaylist);
+                  },
+                  icon: const Icon(Icons.play_arrow),
+                ),
+                pauseWidget: IconButton(
+                  onPressed: () {
+                    context.read<ApbPlayerBloc>().add(ApbPauseEvent());
+                  },
+                  icon: const Icon(Icons.pause),
+                ),
+                loadingWidget: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: const CircularProgressIndicator(),
+                ),
+                replayWidget: IconButton(
+                  onPressed: () {
+                    context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+                  },
+                  icon: const Icon(Icons.replay),
+                ),
+                resumeWidget: IconButton(
+                  onPressed: () {
+                    context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+                  },
+                  icon: const Icon(Icons.play_arrow),
+                ),
+              ),
+              ApbNextWidget(),
+              ApbLoopToggleWidget(),
+              ApbShuffleToggleWidget(),
+              ApbSpeedToggleWidget(),
+            ],
+          ),
+          ApbProgressWidget(
+            playingBuilder: (context, progress, duration, position) {
+              return ProgressBar(
+                progress: position ?? Duration.zero,
+                total: duration ?? Duration.zero,
+                onSeek: (value) {
+                  context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
+                },
+              );
+            },
+            defaultBuilder: (context, progress, duration, position) {
+              return LinearProgressIndicator(value: progress);
+            },
+          ),
+          ListView.builder(
+            itemCount: audioList.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final audio = audioList[index];
+              return ListTile(
+                leading:
+                    audio.imageUrl != null
+                        ? Image.network(
+                          audio.imageUrl!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.music_note);
+                          },
+                        )
+                        : const Icon(Icons.music_note),
+                title: Text(audio.name ?? 'Unknown'),
+                subtitle: Column(
+                  children: [
+                    Text(audio.contributorsToString ?? 'Unknown Artist'),
+                    ApbProgressWidget(
+                      playingBuilder: (context, progress, duration, position) {
+                        return LinearProgressIndicator(value: progress);
+                      },
+                      defaultBuilder: (context, progress, duration, position) {
+                        return LinearProgressIndicator(value: progress);
+                      },
+                      audio: audio,
+                    ),
+                  ],
+                ),
+                trailing: ApbPlayPauseWidget(
+                  playWidget: IconButton(
+                    onPressed: () => _playAudio(audio),
+                    icon: Icon(Icons.play_arrow),
+                  ),
+                  pauseWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbPauseEvent());
                     },
-                  )
-                : const Icon(Icons.music_note),
-            title: Text(audio.name ?? 'Unknown'),
-            subtitle: Text(audio.contributorsToString ?? 'Unknown Artist'),
-            trailing: IconButton(
-              icon: const Icon(Icons.play_arrow),
-              onPressed: () => _playAudio(audio),
-            ),
-          );
-        },
+                    icon: Icon(Icons.pause),
+                  ),
+                  loadingWidget: const CircularProgressIndicator(),
+                  replayWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+                    },
+                    icon: Icon(Icons.replay),
+                  ),
+                  resumeWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+                    },
+                    icon: Icon(Icons.play_arrow),
+                  ),
+                  audio: audio,
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

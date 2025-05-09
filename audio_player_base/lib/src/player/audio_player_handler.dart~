@@ -5,7 +5,7 @@ class AudioPlayerHandler {
   static final AudioPlayerHandler _instance = AudioPlayerHandler._internal();
 
   AudioPlayer? _audioPlayer;
-  final List<ApbPlayableAudio> _playlist = [];
+  final List<AudioSource> _audioSources = [];
 
   AudioPlayerHandler._internal();
 
@@ -14,45 +14,44 @@ class AudioPlayerHandler {
   }
 
   AudioPlayer? get audioPlayer => _audioPlayer;
-  List<ApbPlayableAudio> get playlist => _playlist;
-  List<AudioSource> get audioSources => _playlist.map((e) => e.audioSource).toList();
+  List<AudioSource> get audioSources => _audioSources;
 
   Future<void> init() async {
     await _audioPlayer?.stop();
-    _playlist.clear();
+    _audioSources.clear();
     _audioPlayer ??= AudioPlayer(useProxyForRequestHeaders: false);
   }
 
   void deleteTrackFromQueue(String trackId) {
-    // for (int i = 0; i < _playlist.length; i++) {
-    //   final auSource = _playlist[i];
-    //   final tag = auSource.sequence.single.tag!;
-    //   if (tag.id == trackId) {
-    //     _playlist.removeAt(i);
-    //     break;
-    //   }
-    // }
+    for (int i = 0; i < _audioSources.length; i++) {
+      final auSource = _audioSources[i];
+      final tag = auSource.sequence.single.tag!;
+      if (tag.id == trackId) {
+        _audioSources.removeAt(i);
+        break;
+      }
+    }
   }
 
   void addTracksToQueue(List<ApbPlayableAudio> tracks) {
-    // for (final track in tracks) {
-    //   if (track.filePath != null) {
-    //     _playlist.add(track);
-    //   }
-    // }
+    for (final track in tracks) {
+      if (track.filePath != null) {
+        _audioSources.add(track.audioSource);
+      }
+    }
   }
 
   Future<void> dispose() async {
     await _audioPlayer?.stop();
     await _audioPlayer?.dispose();
     _audioPlayer = null;
-    _playlist.clear();
+    _audioSources.clear();
   }
 
   Future<void> processAudioTrack({required List<ApbPlayableAudio> tracks}) async {
-    _playlist.clear();
+    _audioSources.clear();
     for (final track in tracks) {
-      _playlist.add(track);
+      _audioSources.add(track.audioSource);
     }
   }
 }

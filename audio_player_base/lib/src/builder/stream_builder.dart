@@ -55,14 +55,20 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ApbPlayerBloc, ApbPlayerState>(
       builder: (context, state) {
-        return state.when(
-          initial: () => defaultBuilder(context),
-          loading: (audio, playerStream) => loadingBuilder(context, playerStream, audio),
-          startup: (audio) => defaultBuilder(context),
-          playing: (audio, playerStream) => playingBuilder(context, playerStream, audio),
-          stopped: () => defaultBuilder(context),
-          error: () => defaultBuilder(context),
-        );
+        if (state is ApbInitialState) {
+          return defaultBuilder(context);
+        } else if (state is ApbLoadingState) {
+          return loadingBuilder(context, state.playerStream, state.audio);
+        } else if (state is ApbStartupState) {
+          return defaultBuilder(context);
+        } else if (state is ApbPlayingState) {
+          return playingBuilder(context, state.playerStream, state.audio);
+        } else if (state is ApbStoppedState) {
+          return defaultBuilder(context);
+        } else if (state is ApbErrorState) {
+          return defaultBuilder(context);
+        }
+        return defaultBuilder(context);
       },
     );
   }
@@ -75,21 +81,27 @@ class ApbPlayingOrNotStreamBuilder extends StatelessWidget {
     required this.playingBuilder,
   });
 
-  final Widget Function(BuildContext context) playingBuilder;
+  final Widget Function(BuildContext context, ApbPlayerStateStream psStream) playingBuilder;
   final Widget Function(BuildContext context) defaultBuilder;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ApbPlayerBloc, ApbPlayerState>(
       builder: (context, state) {
-        return state.when(
-          initial: () => defaultBuilder(context),
-          loading: (audio, playerStream) => defaultBuilder(context),
-          startup: (audio) => defaultBuilder(context),
-          playing: (audio, playerStream) => playingBuilder(context),
-          stopped: () => defaultBuilder(context),
-          error: () => defaultBuilder(context),
-        );
+        if (state is ApbInitialState) {
+          return defaultBuilder(context);
+        } else if (state is ApbLoadingState) {
+          return defaultBuilder(context);
+        } else if (state is ApbStartupState) {
+          return defaultBuilder(context);
+        } else if (state is ApbPlayingState) {
+          return playingBuilder(context, state.playerStream);
+        } else if (state is ApbStoppedState) {
+          return defaultBuilder(context);
+        } else if (state is ApbErrorState) {
+          return defaultBuilder(context);
+        }
+        return defaultBuilder(context);
       },
     );
   }

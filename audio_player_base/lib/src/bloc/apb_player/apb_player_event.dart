@@ -1,17 +1,90 @@
 part of 'apb_player_bloc.dart';
 
-@freezed
-abstract class ApbPlayerEvent with _$ApbPlayerEvent {
-  const factory ApbPlayerEvent.play() = _Play;
-  const factory ApbPlayerEvent.playCollection(ApbPlayablePlaylist playlist, int index) = _PlayCollection;
-  const factory ApbPlayerEvent.pause() = _Pause;
-  const factory ApbPlayerEvent.resume() = _Resume;
-  const factory ApbPlayerEvent.stop() = _Stop;
-  const factory ApbPlayerEvent.next() = _Next;
-  const factory ApbPlayerEvent.prev() = _Prev;
-  const factory ApbPlayerEvent.replay() = _Replay;
-  const factory ApbPlayerEvent.seek(Duration position) = _Seek;
-  const factory ApbPlayerEvent.skip(Duration position, Duration duration, Duration skipDuration) = _Skip;
-  const factory ApbPlayerEvent.toggleSpeed(double speed) = _ToggleSpeed;
-  const factory ApbPlayerEvent.toggleLoop(LoopMode loopMode) = _ToggleLoop;
+abstract class ApbPlayerEvent extends Equatable {
+  const ApbPlayerEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ApbPlayPlaylistEvent extends ApbPlayerEvent {
+  final ApbPlayablePlaylist playlist;
+  const ApbPlayPlaylistEvent(this.playlist);
+
+  @override
+  List<Object?> get props => [playlist];
+}
+class ApbPlayAudioEvent extends ApbPlayerEvent {
+  final ApbPlayableAudio audio;
+
+  const ApbPlayAudioEvent(this.audio);
+
+  @override
+  List<Object?> get props => [audio];
+}
+
+class ApbPauseEvent extends ApbPlayerEvent {
+  const ApbPauseEvent();
+}
+
+class ApbResumeEvent extends ApbPlayerEvent {
+  const ApbResumeEvent();
+}
+
+class ApbStopEvent extends ApbPlayerEvent {
+  const ApbStopEvent();
+}
+
+class ApbNextEvent extends ApbPlayerEvent {
+  const ApbNextEvent();
+}
+
+class ApbPrevEvent extends ApbPlayerEvent {
+  const ApbPrevEvent();
+}
+
+class ApbReplayEvent extends ApbPlayerEvent {
+  const ApbReplayEvent();
+}
+
+class ApbSeekEvent extends ApbPlayerEvent {
+  final Duration position;
+
+  const ApbSeekEvent(this.position);
+
+  @override
+  List<Object?> get props => [position];
+}
+
+class ApbSkipEvent extends ApbPlayerEvent {
+  final Duration position;
+  final Duration duration;
+  final Duration skipDuration;
+
+  const ApbSkipEvent(this.position, this.duration, this.skipDuration);
+
+  @override
+  List<Object?> get props => [position, duration, skipDuration];
+}
+
+class ApbToggleSpeedEvent extends ApbPlayerEvent {
+  final double speed;
+
+  const ApbToggleSpeedEvent(this.speed);
+
+  @override
+  List<Object?> get props => [speed];
+}
+
+class ApbToggleLoopEvent extends ApbPlayerEvent {
+  final LoopMode loopMode;
+
+  const ApbToggleLoopEvent(this.loopMode);
+
+  @override
+  List<Object?> get props => [loopMode];
+}
+
+class ApbToggleShuffleEvent extends ApbPlayerEvent {
+  const ApbToggleShuffleEvent();
 }

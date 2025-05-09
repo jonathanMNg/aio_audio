@@ -144,7 +144,6 @@ class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
 
   Future<void> _onToggleSpeed(ApbToggleSpeedEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.audioPlayer!.setSpeed(event.speed);
-    print(event.speed);
   }
 
   Future<void> _onToggleLoop(ApbToggleLoopEvent event, Emitter<ApbPlayerState> emit) async {
