@@ -66,35 +66,35 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             children: [
               ApbPrevWidget(),
-              ApbPlayPauseWidget(
-                playWidget: IconButton(
-                  onPressed: () {
-                    _playPlaylist(mockPlaylist);
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                ),
-                pauseWidget: IconButton(
-                  onPressed: () {
-                    context.read<ApbPlayerBloc>().add(ApbPauseEvent());
-                  },
-                  icon: const Icon(Icons.pause),
-                ),
-                loadingWidget: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: const CircularProgressIndicator(),
-                ),
-                replayWidget: IconButton(
-                  onPressed: () {
-                    context.read<ApbPlayerBloc>().add(ApbReplayEvent());
-                  },
-                  icon: const Icon(Icons.replay),
-                ),
-                resumeWidget: IconButton(
-                  onPressed: () {
-                    context.read<ApbPlayerBloc>().add(ApbResumeEvent());
-                  },
-                  icon: const Icon(Icons.play_arrow),
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: ApbPlayPauseWidget(
+                  playWidget: IconButton(
+                    onPressed: () {
+                      _playPlaylist(mockPlaylist);
+                    },
+                    icon: const Icon(Icons.play_arrow),
+                  ),
+                  pauseWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbPauseEvent());
+                    },
+                    icon: const Icon(Icons.pause),
+                  ),
+                  loadingWidget: const CircularProgressIndicator(),
+                  replayWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+                    },
+                    icon: const Icon(Icons.replay),
+                  ),
+                  resumeWidget: IconButton(
+                    onPressed: () {
+                      context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+                    },
+                    icon: const Icon(Icons.play_arrow),
+                  ),
                 ),
               ),
               ApbNextWidget(),
@@ -103,19 +103,22 @@ class _MyHomePageState extends State<MyHomePage> {
               ApbSpeedToggleWidget(),
             ],
           ),
-          ApbProgressWidget(
-            playingBuilder: (context, progress, duration, position) {
-              return ProgressBar(
-                progress: position ?? Duration.zero,
-                total: duration ?? Duration.zero,
-                onSeek: (value) {
-                  context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
-                },
-              );
-            },
-            defaultBuilder: (context, progress, duration, position) {
-              return LinearProgressIndicator(value: progress);
-            },
+          SizedBox(
+            height: 30,
+            child: ApbProgressWidget(
+              playingBuilder: (context, progress, duration, position) {
+                return ProgressBar(
+                  progress: position ?? Duration.zero,
+                  total: duration ?? Duration.zero,
+                  onSeek: (value) {
+                    context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
+                  },
+                );
+              },
+              defaultBuilder: (context, progress, duration, position) {
+                return Container(child: LinearProgressIndicator(value: progress));
+              },
+            ),
           ),
           ListView.builder(
             itemCount: audioList.length,

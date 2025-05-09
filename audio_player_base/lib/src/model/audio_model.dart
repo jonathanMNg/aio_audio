@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -41,6 +39,9 @@ abstract class ApbPlayableAudio {
     if (duration == null) return null;
     return position != null ? position!.inSeconds / duration!.inSeconds : 0;
   }
+
+  ApbPlayableAudio fromJson(Map<String, dynamic> json);
+  Map<String, dynamic> toJson();
 }
 
 class ApbPlayablePlaylist {
@@ -81,6 +82,18 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
   AudioSource get audioSource {
     return ProgressiveAudioSource(Uri.parse(fileUrl!), tag: tag);
   }
+
+  @override
+  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    // TODO: implement toJson
+    throw UnimplementedError();
+  }
 }
 
 class ApbFilePlayableAudio extends ApbPlayableAudio {
@@ -102,7 +115,20 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
     return ProgressiveAudioSource(Uri.parse('$savedDir/${filePath!}'), tag: tag);
   }
   final String savedDir;
+
+  @override
+  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    // TODO: implement toJson
+    throw UnimplementedError();
+  }
 }
+
 class ApbAssetPlayableAudio extends ApbPlayableAudio {
   ApbAssetPlayableAudio({
     required super.id,
@@ -121,6 +147,18 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
     return AudioSource.asset(assetStr, tag: tag);
   }
   final String assetStr;
+
+  @override
+  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    // TODO: implement toJson
+    throw UnimplementedError();
+  }
 }
 
 // class ApbYtPlayableAudio extends ApbPlayableAudio {

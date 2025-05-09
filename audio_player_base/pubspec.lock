@@ -323,6 +323,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  hive_ce:
+    dependency: transitive
+    description:
+      name: hive_ce
+      sha256: fdc19336f03ecd01dbc1d1afe69d87ed9336bdf996c5374a25f9c21ef5f2989e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.1"
   http:
     dependency: transitive
     description:
@@ -347,6 +355,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  hydrated_bloc:
+    dependency: "direct main"
+    description:
+      name: hydrated_bloc
+      sha256: "5401d5df7d800256a0d1ae16b5d8b518dd44c50d412fe96c6a96d8a4ea85a938"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.0"
   io:
     dependency: transitive
     description:
@@ -355,6 +371,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  isolate_channel:
+    dependency: transitive
+    description:
+      name: isolate_channel
+      sha256: bafedfbcc1e9796ada179b5dac7043b33eb85d35204b089ca37d480d9c0068df
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   js:
     dependency: transitive
     description:
@@ -482,7 +506,7 @@ packages:
     source: hosted
     version: "1.9.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"

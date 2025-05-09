@@ -4,14 +4,14 @@ import 'package:audio_player_base/src/player/audio_player_handler.dart';
 import 'package:audio_player_base/src/repository/src/audio_provider.dart';
 import 'package:audio_player_base/src/repository/src/playlist_provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 export 'package:just_audio/just_audio.dart' show LoopMode;
 part 'apb_player_event.dart';
 part 'apb_player_state.dart';
 
-class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
+class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   final ApbPlaylistProvider playlistProvider;
   final ApbAudioProvider audioProvider;
   final AudioPlayerHandler _audioPlayerService = AudioPlayerHandler();
@@ -144,18 +144,61 @@ class ApbPlayerBloc extends Bloc<ApbPlayerEvent, ApbPlayerState> {
 
   Future<void> _onToggleSpeed(ApbToggleSpeedEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.audioPlayer!.setSpeed(event.speed);
-    print(event.speed);
   }
 
   Future<void> _onToggleLoop(ApbToggleLoopEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.audioPlayer!.setLoopMode(event.loopMode);
-    // final playerStream = ApbPlayerStateStream(_audioPlayerService.audioPlayer!);
-    // final currentIndex = _audioPlayerService.audioPlayer!.currentIndex;
-    // final selectedAudio = _audioPlayerService.playlist[currentIndex!];
-    // emit(ApbPlayingState(audio: selectedAudio, playerStream: playerStream));
   }
 
   Future<void> _onReplay(ApbReplayEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.audioPlayer!.seek(const Duration(seconds: 0), index: 0);
+  }
+
+  @override
+  ApbPlayerState? fromJson(Map<String, dynamic> json) {
+    // try {
+    //   final String stateType = json['type'] as String;
+    //
+    //   switch (stateType) {
+    //     case 'initial':
+    //       return const ApbInitialState();
+    //
+    //     case 'startup':
+    //       return ApbStartupState(
+    //         ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
+    //       );
+    //
+    //     case 'loading':
+    //       return ApbLoadingState(
+    //         audio: ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
+    //         // Note: playerStream cannot be restored from JSON as it requires a live AudioPlayer instance
+    //         playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
+    //       );
+    //
+    //     case 'playing':
+    //       return ApbPlayingState(
+    //         audio: ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
+    //         // Note: playerStream cannot be restored from JSON as it requires a live AudioPlayer instance
+    //         playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
+    //       );
+    //
+    //     case 'stopped':
+    //       return const ApbStoppedState();
+    //
+    //     case 'error':
+    //       return const ApbErrorState();
+    //
+    //     default:
+    //       return const ApbInitialState();
+    //   }
+    // } catch (e) {
+    //   return const ApbInitialState();
+    // }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ApbPlayerState state) {
+    // TODO: implement toJson
+    throw UnimplementedError();
   }
 }
