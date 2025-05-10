@@ -41,7 +41,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
 
   Future<void> _onAddAudio(ApbAddAudioEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.insertAudio(event.audio);
-    print (_audioPlayerService.playlist.length);
     emit(state.copyWith(playlist: state.playlist?.copyWith(audios: _audioPlayerService.playlist)));
   }
 

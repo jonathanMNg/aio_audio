@@ -65,131 +65,282 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          Row(
-            children: [
-              ApbPrevWidget(),
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: ApbPlayPauseWidget(
-                  playWidget: IconButton(
-                    onPressed: () {
-                      _playPlaylist(mockPlaylist);
-                    },
-                    icon: const Icon(Icons.play_arrow),
-                  ),
-                  pauseWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbPauseEvent());
-                    },
-                    icon: const Icon(Icons.pause),
-                  ),
-                  loadingWidget: const CircularProgressIndicator(),
-                  replayWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbReplayEvent());
-                    },
-                    icon: const Icon(Icons.replay),
-                  ),
-                  resumeWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbResumeEvent());
-                    },
-                    icon: const Icon(Icons.play_arrow),
-                  ),
-                ),
-              ),
-              ApbNextWidget(),
-              ApbLoopToggleWidget(),
-              ApbShuffleToggleWidget(),
-              ApbSpeedToggleWidget(),
-              IconButton(onPressed: (){
-                context.read<ApbPlayerBloc>().add(const ApbInitStartUpEvent());
-              }, icon: const Icon(Icons.fullscreen),)
-            ],
-          ),
-          SizedBox(
-            height: 30,
-            child: ApbProgressWidget(
-              playingBuilder: (context, progress, duration, position) {
-                return ProgressBar(
-                  progress: position ?? Duration.zero,
-                  total: duration ?? Duration.zero,
-                  onSeek: (value) {
-                    context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
-                  },
-                );
-              },
-              defaultBuilder: (context, progress, duration, position) {
-                return LinearProgressIndicator(value: progress);
-              },
-            ),
-          ),
-          ListView.builder(
-            itemCount: audioList.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              final audio = audioList[index];
-              return ListTile(
-                leading:
-                    audio.imageUrl != null
-                        ? Image.network(
-                          audio.imageUrl!,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.music_note);
-                          },
-                        )
-                        : const Icon(Icons.music_note),
-                title: Text(audio.name ?? 'Unknown'),
-                subtitle: Column(
-                  children: [
-                    Text(audio.contributorsToString ?? 'Unknown Artist'),
-                    ApbProgressWidget(
-                      playingBuilder: (context, progress, duration, position) {
-                        return LinearProgressIndicator(value: progress);
-                      },
-                      defaultBuilder: (context, progress, duration, position) {
-                        return LinearProgressIndicator(value: progress);
-                      },
-                      audio: audio,
-                    ),
-                  ],
-                ),
-                trailing: ApbPlayPauseWidget(
-                  playWidget: IconButton(
-                    onPressed: () => _playAudio(audio),
-                    icon: Icon(Icons.play_arrow),
-                  ),
-                  pauseWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbPauseEvent());
-                    },
-                    icon: Icon(Icons.pause),
-                  ),
-                  loadingWidget: const CircularProgressIndicator(),
-                  replayWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbReplayEvent());
-                    },
-                    icon: Icon(Icons.replay),
-                  ),
-                  resumeWidget: IconButton(
-                    onPressed: () {
-                      context.read<ApbPlayerBloc>().add(ApbResumeEvent());
-                    },
-                    icon: Icon(Icons.play_arrow),
-                  ),
-                  audio: audio,
-                ),
-              );
+          _buildItemTracker(),
+          _buildFirstControlRow(),
+          _buildSecondControlRow(),
+          _buildProgressBar(),
+          _buildAudioList(),
+          _buildNewAudioItem(),
+        ],
+      ),
+    );
+  }
+  Widget _buildProgressBar() {
+    return SizedBox(
+      height: 30,
+      child: ApbProgressWidget(
+        playingBuilder: (context, progress, duration, position) {
+          return ProgressBar(
+            progress: position ?? Duration.zero,
+            total: duration ?? Duration.zero,
+            onSeek: (value) {
+              context.read<ApbPlayerBloc>().add(ApbSeekEvent(value));
             },
+          );
+        },
+        defaultBuilder: (context, progress, duration, position) {
+          return LinearProgressIndicator(value: progress);
+        },
+      ),
+    );
+  }
+
+  Widget _buildItemTracker() {
+    return ApbActiveStreamBuilder(
+        loadingBuilder: (context, psStream, loadingAudio) {
+          return ListTile(
+            leading: loadingAudio.imageUrl != null
+                ? Image.network(
+              loadingAudio.imageUrl!,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.music_note);
+              },
+            ) : const Icon(Icons.music_note),
+            title: Text(loadingAudio.name ?? 'Unknown'),
+            trailing: CircularProgressIndicator(),
+          );
+
+        },
+        defaultBuilder: (context, audio) {
+          return ListTile(
+            leading: audio?.imageUrl != null
+                ? Image.network(
+              audio!.imageUrl!,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.music_note);
+              },
+            ) : const Icon(Icons.music_note),
+            title: Text(audio?.name ?? 'Unknown'),
+            trailing: IconButton(
+              onPressed: () {
+              },
+              icon: const Icon(Icons.play_arrow),
+            ),
+          );
+        },
+        playingBuilder: (context, psStream, playingAudio) {
+          return ListTile(
+            leading: playingAudio.imageUrl != null
+                ? Image.network(
+              playingAudio.imageUrl!,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.music_note);
+              },
+            ) : const Icon(Icons.music_note),
+            title: Text(playingAudio.name ?? 'Unknown'),
+            trailing: IconButton(
+              onPressed: () {
+              },
+              icon: const Icon(Icons.pause),
+            ),
+          );
+
+        }
+    );
+  }
+
+  Widget _buildSecondControlRow() {
+    return Row(
+      children: [
+        ApbLoopToggleWidget(),
+        ApbShuffleToggleWidget(),
+        ApbSpeedToggleWidget(),
+        IconButton(
+          onPressed: () {
+            context.read<ApbPlayerBloc>().add(const ApbStopPlayerEvent());
+          },
+          icon: const Icon(Icons.stop),
+        ),
+        IconButton(onPressed: (){
+          context.read<ApbPlayerBloc>().add(ApbAddAudioEvent(newMockAudio));
+        }, icon: const Icon(Icons.add))
+      ],
+    );
+  }
+  Widget _buildNewAudioItem() {
+    return ListTile(
+      leading:
+      newMockAudio.imageUrl != null
+          ? Image.network(
+        newMockAudio.imageUrl!,
+        width: 50,
+        height: 50,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.music_note);
+        },
+      )
+          : const Icon(Icons.music_note),
+      title: Text(newMockAudio.name ?? 'Unknown'),
+      subtitle: Column(
+        children: [
+          Text(newMockAudio.contributorsToString ?? 'Unknown Artist'),
+          ApbProgressWidget(
+            playingBuilder: (context, progress, duration, position) {
+              return LinearProgressIndicator(value: progress);
+            },
+            defaultBuilder: (context, progress, duration, position) {
+              return LinearProgressIndicator(value: progress);
+            },
+            audio: newMockAudio,
           ),
         ],
       ),
+      trailing: ApbPlayPauseWidget(
+        playWidget: IconButton(
+          onPressed: () => _playAudio(newMockAudio),
+          icon: Icon(Icons.play_arrow),
+        ),
+        pauseWidget: IconButton(
+          onPressed: () {
+            context.read<ApbPlayerBloc>().add(ApbPauseEvent());
+          },
+          icon: Icon(Icons.pause),
+        ),
+        loadingWidget: const CircularProgressIndicator(),
+        replayWidget: IconButton(
+          onPressed: () {
+            context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+          },
+          icon: Icon(Icons.replay),
+        ),
+        resumeWidget: IconButton(
+          onPressed: () {
+            context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+          },
+          icon: Icon(Icons.play_arrow),
+        ),
+        audio: newMockAudio,
+      ),
+    );
+  }
+  Widget _buildFirstControlRow() {
+    return Row(
+      children: [
+        ApbPrevWidget(),
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: ApbPlayPauseWidget(
+            playWidget: IconButton(
+              onPressed: () {
+                _playPlaylist(mockPlaylist);
+              },
+              icon: const Icon(Icons.play_arrow),
+            ),
+            pauseWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbPauseEvent());
+              },
+              icon: const Icon(Icons.pause),
+            ),
+            loadingWidget: const CircularProgressIndicator(),
+            replayWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+              },
+              icon: const Icon(Icons.replay),
+            ),
+            resumeWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+              },
+              icon: const Icon(Icons.play_arrow),
+            ),
+          ),
+        ),
+        ApbNextWidget(),
+        ApbSkipBackwardWidget(),
+        ApbSkipForwardWidget(),
+      ],
+    );
+  }
+
+  Widget _buildAudioList() {
+    return ListView.builder(
+      itemCount: audioList.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        final audio = audioList[index];
+        return ListTile(
+          leading:
+          audio.imageUrl != null
+              ? Image.network(
+            audio.imageUrl!,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.music_note);
+            },
+          )
+              : const Icon(Icons.music_note),
+          title: Text(audio.name ?? 'Unknown'),
+          subtitle: Column(
+            children: [
+              Text(audio.contributorsToString ?? 'Unknown Artist'),
+              ApbProgressWidget(
+                playingBuilder: (context, progress, duration, position) {
+                  return LinearProgressIndicator(value: progress);
+                },
+                defaultBuilder: (context, progress, duration, position) {
+                  return LinearProgressIndicator(value: progress);
+                },
+                audio: audio,
+              ),
+            ],
+          ),
+          trailing: ApbPlayPauseWidget(
+            playWidget: IconButton(
+              onPressed: () {
+                print(audio.name);
+                _playAudio(audio);
+              },
+              icon: Icon(Icons.play_arrow),
+            ),
+            pauseWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbPauseEvent());
+              },
+              icon: Icon(Icons.pause),
+            ),
+            loadingWidget: const CircularProgressIndicator(),
+            replayWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbReplayEvent());
+              },
+              icon: Icon(Icons.replay),
+            ),
+            resumeWidget: IconButton(
+              onPressed: () {
+                context.read<ApbPlayerBloc>().add(ApbResumeEvent());
+              },
+              icon: Icon(Icons.play_arrow),
+            ),
+            audio: audio,
+          ),
+        );
+      },
     );
   }
 }

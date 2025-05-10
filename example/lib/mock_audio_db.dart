@@ -57,3 +57,17 @@ final ApbPlayablePlaylist mockPlaylist = ApbPlayablePlaylist(
   audios: audioList,
 );
 
+
+final ApbUrlPlayableAudio newMockAudio =
+ApbUrlPlayableAudio(
+  id: '5',
+  name: 'Sample Audio 5',
+  fileUrl:
+  'https://jnapp2.b-cdn.net/Nhac-Phat-Giao/song-va-bien-quynh-trang.mp3',
+  imageUrl:
+  'https://res.cloudinary.com/jnappdev/image/upload/v1682509536/kinhtritung/images/chu_dai_bi_nhac_hoa.jpg',
+  contributors: ['Artist 5'],
+  playlistId: 'playlist_1',
+  duration: Duration(seconds: 180),
+  position: Duration(seconds: 50),
+);

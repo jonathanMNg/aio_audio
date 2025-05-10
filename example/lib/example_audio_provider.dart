@@ -26,4 +26,9 @@ class ExampleAudioProvider implements ApbAudioProvider<ApbPlayableAudio> {
   Future<ApbPlayableAudio> get(String audioId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApbPlayableAudio?> getLastPlayed() async {
+    return _mockAudioList[1];
+  }
 } 

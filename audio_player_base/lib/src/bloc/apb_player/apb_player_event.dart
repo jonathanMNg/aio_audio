@@ -31,8 +31,8 @@ class ApbResumeEvent extends ApbPlayerEvent {
   const ApbResumeEvent();
 }
 
-class ApbStopEvent extends ApbPlayerEvent {
-  const ApbStopEvent();
+class ApbStopPlayerEvent extends ApbPlayerEvent {
+  const ApbStopPlayerEvent();
 }
 
 class ApbNextEvent extends ApbPlayerEvent {
@@ -91,4 +91,14 @@ class ApbToggleShuffleEvent extends ApbPlayerEvent {
 
 class ApbInitStartUpEvent extends ApbPlayerEvent {
   const ApbInitStartUpEvent();
+}
+
+class ApbAddAudioEvent extends ApbPlayerEvent {
+  final ApbPlayableAudio audio;
+  final int? index;
+
+  const ApbAddAudioEvent(this.audio, {this.index});
+
+  @override
+  List<Object?> get props => [audio, index];
 }

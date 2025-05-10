@@ -35,7 +35,7 @@ class ApbPlayPauseWidget extends StatelessWidget {
           return loadingWidget;
         }
       },
-      defaultBuilder: (context) {
+      defaultBuilder: (context, audio) {
         return playWidget;
       },
       playingBuilder: (context, psStream, playingAudio) {

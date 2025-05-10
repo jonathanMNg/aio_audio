@@ -21,7 +21,7 @@ class ApbProgressWidget extends StatelessWidget {
           }
           return defaultBuilder(context, loadingAudio.progress, loadingAudio.duration, loadingAudio.position);
         },
-        defaultBuilder: (context) {
+        defaultBuilder: (context, audio) {
           return defaultBuilder(context, audio?.progress ?? 0, audio?.duration, audio?.position);
         },
         playingBuilder: (context, psStream, playingAudio) {

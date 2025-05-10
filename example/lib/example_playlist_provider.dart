@@ -2,7 +2,6 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'mock_audio_db.dart';
 
 class ExamplePlaylistProvider implements ApbPlaylistProvider<ApbPlayablePlaylist> {
-  final List<ApbUrlPlayableAudio> _mockAudioList = audioList;
   final ApbPlayablePlaylist _mockPlaylist = mockPlaylist;
 
   @override
@@ -25,11 +24,20 @@ class ExamplePlaylistProvider implements ApbPlaylistProvider<ApbPlayablePlaylist
   Future<void> update(ApbPlayablePlaylist playlist) async {}
 
   @override
-  Future<void> add(ApbPlayablePlaylist playlist, List<ApbPlayableAudio> tracks) async {}
-
-  @override
   Future<void> addToMultiple(List<ApbPlayablePlaylist> playlistsList, ApbPlayableAudio audio) async {}
 
   @override
   Future<void> remove(ApbPlayableAudio audio) async {}
+
+  @override
+  Future<void> add(ApbPlayablePlaylist playlist, ApbPlayableAudio audio) {
+    // TODO: implement add
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> insert(int index, ApbPlayablePlaylist playlist, ApbPlayableAudio audio) {
+    // TODO: implement insert
+    throw UnimplementedError();
+  }
 } 

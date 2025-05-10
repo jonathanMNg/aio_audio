@@ -96,6 +96,30 @@ class ApbPlayablePlaylist {
 
   int get count => audios?.length ?? 0;
 
+  ApbPlayablePlaylist copyWith({
+    String? id,
+    String? name,
+    String? imageUrl,
+    String? desc,
+    List<String>? contributors,
+    bool? shouldHide,
+    List<ApbPlayableAudio>? audios,
+    DateTime? lastUpdated,
+    DateTime? lastPlayed,
+  }) {
+    return ApbPlayablePlaylist(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      desc: desc ?? this.desc,
+      contributors: contributors ?? this.contributors,
+      shouldHide: shouldHide ?? this.shouldHide,
+      audios: audios ?? this.audios,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      lastPlayed: lastPlayed ?? this.lastPlayed,
+    );
+  }
+
   DateTime get lastActive =>
       (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch <
               _lastUpdated.millisecondsSinceEpoch

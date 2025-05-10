@@ -23,7 +23,17 @@ class AudioPlayerHandler {
     _audioPlayer ??= AudioPlayer(useProxyForRequestHeaders: false);
   }
 
-  void deleteTrackFromQueue(String trackId) {
+  Future<void> removeAudio(ApbPlayableAudio deleteAudio, {int? index}) async {
+    if(index != null && index < _playlist.length) {
+      _playlist.removeAt(index);
+      _audioPlayer?.removeAudioSourceAt(index);
+    }
+    else {
+      final removeIndex = _playlist.indexWhere((audio) => audio.id == deleteAudio.id);
+      _audioPlayer?.removeAudioSourceAt(removeIndex);
+      _playlist.removeAt(removeIndex);
+    }
+
     // for (int i = 0; i < _playlist.length; i++) {
     //   final auSource = _playlist[i];
     //   final tag = auSource.sequence.single.tag!;
@@ -34,7 +44,17 @@ class AudioPlayerHandler {
     // }
   }
 
-  void addTracksToQueue(List<ApbPlayableAudio> tracks) {
+  Future<void> insertAudio(ApbPlayableAudio audio, {int? index}) async {
+    if(index != null && index < _playlist.length) {
+      _playlist.insert(index, audio);
+      _audioPlayer?.insertAudioSource(index, audio.audioSource);
+    }
+    else {
+      _playlist.add(audio);
+      _audioPlayer?.addAudioSource(audio.audioSource);
+    }
+
+
     // for (final track in tracks) {
     //   if (track.filePath != null) {
     //     _playlist.add(track);
