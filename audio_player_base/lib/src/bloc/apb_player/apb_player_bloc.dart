@@ -30,12 +30,15 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     on<ApbToggleLoopEvent>(_onToggleLoop);
     on<ApbReplayEvent>(_onReplay);
     on<ApbToggleShuffleEvent>(_onToggleShuffle);
+    on<ApbInitStartUpEvent>(_onInitStartUp);
   }
 
+  Future<void> _onInitStartUp(ApbInitStartUpEvent event, Emitter<ApbPlayerState> emit) async {
+    emit(const ApbStoppedState());
+  }
   Future<void> _onToggleShuffle(ApbToggleShuffleEvent event, Emitter<ApbPlayerState> emit) async {
     final currentShuffleMode = _audioPlayerService.audioPlayer!.shuffleModeEnabled;
     await _audioPlayerService.audioPlayer!.setShuffleModeEnabled(!currentShuffleMode);
-    // print('currentShuffleMode: ${_audioPlayerService.audioPlayer!.shuffleModeEnabled}');
   }
   Future<void> _onPlayPlaylist(ApbPlayPlaylistEvent event, Emitter<ApbPlayerState> emit) async {
     await _handlePlay(emit, playlist: event.playlist);
@@ -155,50 +158,86 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   }
 
   @override
-  ApbPlayerState? fromJson(Map<String, dynamic> json) {
-    // try {
-    //   final String stateType = json['type'] as String;
-    //
-    //   switch (stateType) {
-    //     case 'initial':
-    //       return const ApbInitialState();
-    //
-    //     case 'startup':
-    //       return ApbStartupState(
-    //         ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
-    //       );
-    //
-    //     case 'loading':
-    //       return ApbLoadingState(
-    //         audio: ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
-    //         // Note: playerStream cannot be restored from JSON as it requires a live AudioPlayer instance
-    //         playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
-    //       );
-    //
-    //     case 'playing':
-    //       return ApbPlayingState(
-    //         audio: ApbPlayableAudio.fromJson(json['audio'] as Map<String, dynamic>),
-    //         // Note: playerStream cannot be restored from JSON as it requires a live AudioPlayer instance
-    //         playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
-    //       );
-    //
-    //     case 'stopped':
-    //       return const ApbStoppedState();
-    //
-    //     case 'error':
-    //       return const ApbErrorState();
-    //
-    //     default:
-    //       return const ApbInitialState();
-    //   }
-    // } catch (e) {
-    //   return const ApbInitialState();
-    // }
+  ApbPlayerState fromJson(Map<String, dynamic> json) {
+    try {
+      final String stateType = json['type'] as String;
+      final Map<String, dynamic> audioJson = json['audio'] as Map<String, dynamic>;
+      ApbPlayableAudio audio = ApbPlayableAudio.fromJson(audioJson);
+
+      switch (stateType) {
+        case 'startup':
+          return ApbStartupState(audio) as ApbPlayerState;
+
+        case 'loading':
+          return ApbLoadingState(
+            audio: audio,
+            playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
+          );
+
+        case 'playing':
+          return ApbPlayingState(
+            audio: audio,
+            playerStream: ApbPlayerStateStream(_audioPlayerService.audioPlayer!),
+          );
+
+        case 'stopped':
+          print('stopped');
+          return const ApbStoppedState() as ApbPlayerState;
+
+        case 'error':
+          return const ApbErrorState();
+
+        default:
+          return const ApbErrorState();
+      }
+    } catch (e) {
+      if(kDebugMode) {
+        rethrow;
+      }
+      else {
+        return const ApbErrorState();
+      }
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(ApbPlayerState state) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    try {
+
+      if (state is ApbStartupState) {
+        return {
+          'type': 'startup',
+          'audio': state.audio.toJson(),
+        };
+      }
+
+      if (state is ApbLoadingState) {
+        return {
+          'type': 'loading',
+          'audio': state.audio.toJson(),
+          // Note: playerStream is not serialized as it contains non-serializable AudioPlayer
+        };
+      }
+
+      if (state is ApbPlayingState) {
+        return {
+          'type': 'playing',
+          'audio': state.audio.toJson(),
+          // Note: playerStream is not serialized as it contains non-serializable AudioPlayer
+        };
+      }
+
+      if (state is ApbStoppedState) {
+        return {'type': 'stopped'};
+      }
+
+      if (state is ApbErrorState) {
+        return {'type': 'error'};
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 }

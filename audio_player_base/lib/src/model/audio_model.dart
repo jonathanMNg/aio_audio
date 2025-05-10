@@ -1,7 +1,14 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
-enum ApbPlayableFileType { file, url, yt, asset }
+part 'audio_model.g.dart';
+
+enum ApbPlayableFileType {
+  @JsonValue('file') file,
+  @JsonValue('url') url,
+  @JsonValue('yt') yt,
+  @JsonValue('asset') asset }
 
 abstract class ApbPlayableAudio {
   final String? id;
@@ -33,14 +40,34 @@ abstract class ApbPlayableAudio {
   });
 
   AudioSource get audioSource;
-  MediaItem get tag => MediaItem(id: sourceId ?? id!, title: name!, artist: contributorsToString, artUri: imageUrl != null ? Uri.parse(imageUrl!) : null);
+
+  MediaItem get tag => MediaItem(
+    id: sourceId ?? id!,
+    title: name!,
+    artist: contributorsToString,
+    artUri: imageUrl != null ? Uri.parse(imageUrl!) : null,
+  );
+
   String? get contributorsToString => contributors?.join(', ');
+
   double? get progress {
     if (duration == null) return null;
     return position != null ? position!.inSeconds / duration!.inSeconds : 0;
   }
 
-  ApbPlayableAudio fromJson(Map<String, dynamic> json);
+  factory ApbPlayableAudio.fromJson(Map<String, dynamic> json) {
+    switch(json['fileType']) {
+      case 'url':
+        return ApbUrlPlayableAudio.fromJson(json);
+      case 'asset':
+        return ApbAssetPlayableAudio.fromJson(json);
+      case 'file':
+        return ApbFilePlayableAudio.fromJson(json);
+      default:
+        throw UnimplementedError();
+    }
+  }
+
   Map<String, dynamic> toJson();
 }
 
@@ -55,15 +82,32 @@ class ApbPlayablePlaylist {
   final DateTime? lastUpdated;
   final DateTime? lastPlayed;
 
-  ApbPlayablePlaylist({this.shouldHide, this.audios, this.lastUpdated, this.lastPlayed, this.id, this.name, this.imageUrl, this.desc, this.contributors});
+  ApbPlayablePlaylist({
+    this.shouldHide,
+    this.audios,
+    this.lastUpdated,
+    this.lastPlayed,
+    this.id,
+    this.name,
+    this.imageUrl,
+    this.desc,
+    this.contributors,
+  });
 
   int get count => audios?.length ?? 0;
-  DateTime get lastActive => (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch < _lastUpdated.millisecondsSinceEpoch ? _lastUpdated : lastPlayed!;
+
+  DateTime get lastActive =>
+      (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch <
+              _lastUpdated.millisecondsSinceEpoch
+          ? _lastUpdated
+          : lastPlayed!;
 
   DateTime get _lastUpdated => lastUpdated!;
+
   String? get contributorsToString => contributors?.join(', ');
 }
 
+@JsonSerializable(includeIfNull: true)
 class ApbUrlPlayableAudio extends ApbPlayableAudio {
   ApbUrlPlayableAudio({
     required super.id,
@@ -75,8 +119,8 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
     super.duration,
     super.contributors,
     super.playlistId,
-    super.createdAt
-}): super(filePath: null, fileType: ApbPlayableFileType.url);
+    super.createdAt,
+  }) : super(filePath: null, fileType: ApbPlayableFileType.url);
 
   @override
   AudioSource get audioSource {
@@ -84,18 +128,14 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
   }
 
   @override
-  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
-  }
+  factory ApbUrlPlayableAudio.fromJson(Map<String, dynamic> json) =>
+      _$ApbUrlPlayableAudioFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJson() => _$ApbUrlPlayableAudioToJson(this);
 }
 
+@JsonSerializable(includeIfNull: true)
 class ApbFilePlayableAudio extends ApbPlayableAudio {
   ApbFilePlayableAudio({
     required super.id,
@@ -108,27 +148,28 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
     super.duration,
     super.contributors,
     super.playlistId,
-    super.createdAt
-  }): super(fileUrl: null, fileType: ApbPlayableFileType.file);
+    super.createdAt,
+  }) : super(fileUrl: null, fileType: ApbPlayableFileType.file);
+
   @override
   AudioSource get audioSource {
-    return ProgressiveAudioSource(Uri.parse('$savedDir/${filePath!}'), tag: tag);
+    return ProgressiveAudioSource(
+      Uri.parse('$savedDir/${filePath!}'),
+      tag: tag,
+    );
   }
+
   final String savedDir;
 
   @override
-  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
-  }
+  factory ApbFilePlayableAudio.fromJson(Map<String, dynamic> json) =>
+      _$ApbFilePlayableAudioFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJson() => _$ApbFilePlayableAudioToJson(this);
 }
 
+@JsonSerializable(includeIfNull: true)
 class ApbAssetPlayableAudio extends ApbPlayableAudio {
   ApbAssetPlayableAudio({
     required super.id,
@@ -140,25 +181,26 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
     super.position,
     super.contributors,
     super.playlistId,
-    super.createdAt
-  }): super(fileUrl: null, filePath: null, fileType: ApbPlayableFileType.asset);
+    super.createdAt,
+  }) : super(
+         fileUrl: null,
+         filePath: null,
+         fileType: ApbPlayableFileType.asset,
+       );
+
   @override
   AudioSource get audioSource {
     return AudioSource.asset(assetStr, tag: tag);
   }
+
   final String assetStr;
 
   @override
-  ApbPlayableAudio fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
-  }
+  factory ApbAssetPlayableAudio.fromJson(Map<String, dynamic> json) =>
+      _$ApbAssetPlayableAudioFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJson() => _$ApbAssetPlayableAudioToJson(this);
 }
 
 // class ApbYtPlayableAudio extends ApbPlayableAudio {

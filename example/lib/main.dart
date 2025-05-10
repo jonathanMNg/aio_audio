@@ -6,7 +6,9 @@ import 'example_playlist_provider.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'mock_audio_db.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AudioPlayerBase.init();
   runApp(const MyApp());
 }
 
@@ -101,6 +103,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ApbLoopToggleWidget(),
               ApbShuffleToggleWidget(),
               ApbSpeedToggleWidget(),
+              IconButton(onPressed: (){
+                context.read<ApbPlayerBloc>().add(const ApbInitStartUpEvent());
+              }, icon: const Icon(Icons.fullscreen),)
             ],
           ),
           SizedBox(
@@ -116,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               defaultBuilder: (context, progress, duration, position) {
-                return Container(child: LinearProgressIndicator(value: progress));
+                return LinearProgressIndicator(value: progress);
               },
             ),
           ),

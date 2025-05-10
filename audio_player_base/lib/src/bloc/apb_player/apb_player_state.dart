@@ -50,7 +50,6 @@ class ApbLoadingState extends ApbPlayerState {
 class ApbPlayingState extends ApbPlayerState {
   final ApbPlayableAudio audio;
   final ApbPlayerStateStream playerStream;
-
   const ApbPlayingState({required this.audio, required this.playerStream});
 
   @override

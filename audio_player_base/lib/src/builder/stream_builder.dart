@@ -88,9 +88,8 @@ class ApbPlayingOrNotStreamBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ApbPlayerBloc, ApbPlayerState>(
       builder: (context, state) {
-        if (state is ApbInitialState) {
-          return defaultBuilder(context);
-        } else if (state is ApbLoadingState) {
+        print(state.toString());
+        if (state is ApbLoadingState) {
           return defaultBuilder(context);
         } else if (state is ApbStartupState) {
           return defaultBuilder(context);

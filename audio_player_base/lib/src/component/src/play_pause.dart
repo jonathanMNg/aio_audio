@@ -65,7 +65,7 @@ class ApbPlayPauseWidget extends StatelessWidget {
           },
         );
         if(audio != null) {
-          if(audio!.id == playingAudio.id) {
+          if(audio?.id == playingAudio.id) {
             return child;
           }
           else {

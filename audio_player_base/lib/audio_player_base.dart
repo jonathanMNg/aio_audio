@@ -11,11 +11,13 @@ export 'src/component/component.dart';
 export 'src/repository/repository.dart';
 
 class AudioPlayerBase {
-  AudioPlayerBase._();
+  AudioPlayerBase._internal();
 
-  static final instance = AudioPlayerBase._();
+  static final AudioPlayerBase _instance = AudioPlayerBase._internal();
 
-  Future<void> init() async {
+  factory AudioPlayerBase() => _instance;
+
+  static Future<void> init() async {
     HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
           ? HydratedStorageDirectory.web

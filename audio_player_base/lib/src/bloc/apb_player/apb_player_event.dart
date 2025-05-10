@@ -88,3 +88,7 @@ class ApbToggleLoopEvent extends ApbPlayerEvent {
 class ApbToggleShuffleEvent extends ApbPlayerEvent {
   const ApbToggleShuffleEvent();
 }
+
+class ApbInitStartUpEvent extends ApbPlayerEvent {
+  const ApbInitStartUpEvent();
+}
