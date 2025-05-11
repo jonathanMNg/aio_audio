@@ -17,9 +17,7 @@ dependencies:
     path: ../../just_audio/just_audio_background
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
-
   rxdart: ^0.28.0
-  get_it: ^8.0.3
   hydrated_bloc: ^10.0.0
   path_provider: ^2.1.5
   json_annotation: ^4.9.0

@@ -41,7 +41,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
 
   Future<void> _onAddAudio(ApbAddAudioEvent event, Emitter<ApbPlayerState> emit) async {
     await _audioPlayerService.insertAudio(event.audio);
-    print (_audioPlayerService.playlist.length);
     emit(state.copyWith(playlist: state.playlist?.copyWith(audios: _audioPlayerService.playlist)));
   }
 
@@ -130,7 +129,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       trackIndex = tracks.indexWhere(
         (element) => element.id == selectedAudio!.id,
       );
-      await _audioPlayerService.processAudioTrack(tracks: tracks);
+      await _audioPlayerService.initPlaylist(audios: tracks);
       Duration initialPos = selectedAudio!.position ?? Duration.zero;
       if (initialPos.inSeconds + 10 >=
           (selectedAudio.duration?.inSeconds ?? 0)) {

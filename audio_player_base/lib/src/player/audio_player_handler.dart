@@ -33,15 +33,6 @@ class AudioPlayerHandler {
       _audioPlayer?.removeAudioSourceAt(removeIndex);
       _playlist.removeAt(removeIndex);
     }
-
-    // for (int i = 0; i < _playlist.length; i++) {
-    //   final auSource = _playlist[i];
-    //   final tag = auSource.sequence.single.tag!;
-    //   if (tag.id == trackId) {
-    //     _playlist.removeAt(i);
-    //     break;
-    //   }
-    // }
   }
 
   Future<void> insertAudio(ApbPlayableAudio audio, {int? index}) async {
@@ -54,12 +45,6 @@ class AudioPlayerHandler {
       _audioPlayer?.addAudioSource(audio.audioSource);
     }
 
-
-    // for (final track in tracks) {
-    //   if (track.filePath != null) {
-    //     _playlist.add(track);
-    //   }
-    // }
   }
 
   Future<void> dispose() async {
@@ -69,10 +54,9 @@ class AudioPlayerHandler {
     _playlist.clear();
   }
 
-  Future<void> processAudioTrack({required List<ApbPlayableAudio> tracks}) async {
-    _playlist.clear();
-    for (final track in tracks) {
-      _playlist.add(track);
+  Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
+    for (final audio in audios) {
+      _playlist.add(audio);
     }
   }
 }
