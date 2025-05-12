@@ -2,6 +2,8 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../builder/src/stream_builder.dart';
+
 class _LoopItem {
   const _LoopItem({
     required this.mode,

@@ -2,6 +2,8 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../builder/src/stream_builder.dart';
+
 class ApbProgressWidget extends StatelessWidget {
   const ApbProgressWidget(
       {super.key, required this.playingBuilder, required this.defaultBuilder, this.audio});

@@ -2,6 +2,8 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../builder/src/stream_builder.dart';
+
 class ApbPlayPauseWidget extends StatelessWidget {
   const ApbPlayPauseWidget({
     super.key,

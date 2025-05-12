@@ -2,6 +2,8 @@ import 'package:audio_player_base/audio_player_base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../builder/src/stream_builder.dart';
+
 class ApbNextWidget extends StatelessWidget {
   const ApbNextWidget({super.key, this.widget});
 

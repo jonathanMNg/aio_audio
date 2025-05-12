@@ -92,9 +92,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       _audioPlayerService.audioPlayer!.setLoopMode(state.loopMode);
       _audioPlayerService.audioPlayer!.setSpeed(state.speed);
 
-      final playerStream = ApbPlayerStateStream.getInstance(
-        _audioPlayerService.audioPlayer!,
-      );
+      final playerStream = _audioPlayerService.psStream!;
       ApbPlayableAudio? selectedAudio;
       ApbPlayablePlaylist? selectedPlaylist;
       List<ApbPlayableAudio> tracks = [];
@@ -177,9 +175,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     ApbStopPlayerEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
-    await _audioPlayerService.audioPlayer?.stop();
     await _audioPlayerService.dispose();
-    ApbPlayerStateStream.dispose();
     emit(state.copyWith(status: ApbPlayerStateStatus.stopped));
   }
 

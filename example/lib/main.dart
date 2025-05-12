@@ -58,21 +58,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: [
-          _buildItemTracker(),
-          _buildFirstControlRow(),
-          _buildSecondControlRow(),
-          _buildProgressBar(),
-          _buildAudioList(),
-          _buildNewAudioItem(),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            title: Text(widget.title),
+          ),
+          body: Column(
+            children: [
+              _buildFirstControlRow(),
+              _buildSecondControlRow(),
+              _buildProgressBar(),
+              _buildAudioList(),
+              _buildNewAudioItem(),
+            ],
+          ),
+          // body: ApbFullPlayer(audio: audio),
+        ),
+
+        _buildItemTracker(),
+      ],
     );
   }
   Widget _buildProgressBar() {
@@ -96,66 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildItemTracker() {
-    return ApbActiveStreamBuilder(
-        loadingBuilder: (context, psStream, loadingAudio) {
-          return ListTile(
-            leading: loadingAudio.imageUrl != null
-                ? Image.network(
-              loadingAudio.imageUrl!,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.music_note);
-              },
-            ) : const Icon(Icons.music_note),
-            title: Text(loadingAudio.name ?? 'Unknown'),
-            trailing: CircularProgressIndicator(),
-          );
-
-        },
-        defaultBuilder: (context, audio) {
-          return ListTile(
-            leading: audio?.imageUrl != null
-                ? Image.network(
-              audio!.imageUrl!,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.music_note);
-              },
-            ) : const Icon(Icons.music_note),
-            title: Text(audio?.name ?? 'Unknown'),
-            trailing: IconButton(
-              onPressed: () {
-              },
-              icon: const Icon(Icons.play_arrow),
-            ),
-          );
-        },
-        playingBuilder: (context, psStream, playingAudio) {
-          return ListTile(
-            leading: playingAudio.imageUrl != null
-                ? Image.network(
-              playingAudio.imageUrl!,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.music_note);
-              },
-            ) : const Icon(Icons.music_note),
-            title: Text(playingAudio.name ?? 'Unknown'),
-            trailing: IconButton(
-              onPressed: () {
-              },
-              icon: const Icon(Icons.pause),
-            ),
-          );
-
-        }
-    );
+    return ApbPlayerWidget();
   }
 
   Widget _buildSecondControlRow() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../audio_player_base.dart';
+import '../../builder/src/stream_builder.dart';
 
 class ApbShuffleToggleWidget extends StatelessWidget {
   const ApbShuffleToggleWidget({super.key});

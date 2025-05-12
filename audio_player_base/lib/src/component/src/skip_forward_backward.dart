@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../builder/src/stream_builder.dart';
+
 class ApbSkipWidget extends StatelessWidget {
   final Icon icon;
   final Duration skipDuration;

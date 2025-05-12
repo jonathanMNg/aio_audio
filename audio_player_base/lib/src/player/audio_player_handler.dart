@@ -1,11 +1,39 @@
 import 'package:audio_player_base/audio_player_base.dart';
 import 'package:just_audio/just_audio.dart';
+class ApbPlayerStateStream {
+  static ApbPlayerStateStream? _instance;
+  final AudioPlayer audioPlayer;
+
+  ApbPlayerStateStream._(this.audioPlayer);
+
+  static ApbPlayerStateStream getInstance(AudioPlayer player) {
+    _instance ??= ApbPlayerStateStream._(player);
+    return _instance!;
+  }
+
+  void dispose() {
+    _instance = null;
+  }
+
+  Stream<PlayerState> get playerStateStream => audioPlayer.playerStateStream;
+  Stream<PlaybackEvent> get playbackEventStream => audioPlayer.playbackEventStream;
+  Stream<Duration?> get durationStream => audioPlayer.durationStream;
+  Stream<LoopMode> get loopModeStream => audioPlayer.loopModeStream;
+  Stream<Duration> get positionStream => audioPlayer.positionStream;
+  Stream<double> get speedStream => audioPlayer.speedStream;
+  Stream<int?> get currentIndexStream => audioPlayer.currentIndexStream;
+  Stream<bool> get hasNextStream => audioPlayer.hasNextStream;
+  Stream<bool> get hasPreviousStream => audioPlayer.hasPreviousStream;
+  Stream<bool> get shuffleModeEnabledStream => audioPlayer.shuffleModeEnabledStream;
+  Stream<List<int>> get shuffleIndicesStream => audioPlayer.shuffleIndicesStream;
+}
 
 class AudioPlayerHandler {
   static final AudioPlayerHandler _instance = AudioPlayerHandler._internal();
 
   AudioPlayer? _audioPlayer;
   final List<ApbPlayableAudio> _playlist = [];
+  ApbPlayerStateStream? _psStream;
 
   AudioPlayerHandler._internal();
 
@@ -16,11 +44,12 @@ class AudioPlayerHandler {
   AudioPlayer? get audioPlayer => _audioPlayer;
   List<ApbPlayableAudio> get playlist => _playlist;
   List<AudioSource> get audioSources => _playlist.map((e) => e.audioSource).toList();
+  ApbPlayerStateStream? get psStream => _psStream;
 
   Future<void> init() async {
-    await _audioPlayer?.stop();
-    _playlist.clear();
+    await dispose();
     _audioPlayer ??= AudioPlayer(useProxyForRequestHeaders: false);
+    _psStream = ApbPlayerStateStream.getInstance(_audioPlayer!);
   }
 
   Future<void> removeAudio(ApbPlayableAudio deleteAudio, {int? index}) async {
@@ -50,6 +79,7 @@ class AudioPlayerHandler {
   Future<void> dispose() async {
     await _audioPlayer?.stop();
     await _audioPlayer?.dispose();
+    _psStream?.dispose();
     _audioPlayer = null;
     _playlist.clear();
   }
