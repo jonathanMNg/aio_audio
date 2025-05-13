@@ -19,12 +19,7 @@ class CachedImageBuilder extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: imageUrl,
             imageBuilder: (context, imageProvider) => Container(
-              constraints: const BoxConstraints(
-                minWidth: double.infinity,
-                minHeight: double.infinity,
-                maxWidth: double.infinity,
-                maxHeight: double.infinity,
-              ),
+              height: height,
               decoration: BoxDecoration(
                 image: DecorationImage(
                     image: imageProvider,
@@ -33,7 +28,7 @@ class CachedImageBuilder extends StatelessWidget {
               ),
             ),
             errorWidget: (context, object, errorWidget) =>
-                Image.asset('assets/images/failed_to_load.jpg'),
+                Image.asset('assets/images/failed_to_load.jpg', height: height,),
             placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
           ),

@@ -24,7 +24,7 @@ class ApbPlayPauseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ApbActiveStreamBuilder(
-      loadingBuilder: (context, psStream, loadingAudio) {
+      loadingBuilder: (context, psStream, playlist, loadingAudio) {
         if(audio != null) {
           if(audio?.id == loadingAudio.id) {
             return loadingWidget;
@@ -40,7 +40,7 @@ class ApbPlayPauseWidget extends StatelessWidget {
       defaultBuilder: (context, audio) {
         return playWidget;
       },
-      playingBuilder: (context, psStream, playingAudio) {
+      playingBuilder: (context, psStream, playlist, playingAudio) {
         final child = ApbCustomStreamBuilder<PlayerState>(
           defaultBuilder: (context) => loadingWidget,
           stream: psStream.playerStateStream,

@@ -26,7 +26,7 @@ class _DraggableScrollablePlayerState extends State<DraggableScrollablePlayer> {
     super.initState();
     _draggableScrollableController = widget.controller;
     _draggableScrollableController?.addListener(() {
-      widget.valueNotifier.value = _draggableScrollableController.size;
+      widget.valueNotifier.value = _draggableScrollableController.pixels;
     });
   }
 

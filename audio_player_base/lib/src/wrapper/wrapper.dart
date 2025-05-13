@@ -1,47 +1,53 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import '../../audio_player_base.dart' show playerMinHeight;
-//
-// final ValueNotifier<double> playerExpandProgress =
-// ValueNotifier(playerMinHeight);
-//
-// class PlayerWrapper extends StatelessWidget {
-//   const PlayerWrapper({required this.child, super.key, this.isAttachedToHomeScreen = false});
-//
-//   final Widget child;
-//   final bool isAttachedToHomeScreen;
-//   @override
-//   Widget build(BuildContext context) {
-//     return ValueListenableBuilder(
-//       valueListenable: playerExpandProgress,
-//       builder: (_, height, builderChild) {
-//         return Stack(
-//           alignment: Alignment.bottomCenter,
-//           children: [
-//             builderChild ?? const SizedBox.shrink(),
-//             BlocBuilder<PlayerBloc, PlayerState>(
-//               builder: (context, state) {
-//                 return state.when(initial: () => const SizedBox.shrink(),
-//                     startup: (audio) => const SizedBox.shrink(),
-//                     loading: (audio, stream) => const SizedBox.shrink(),
-//                     playing: (audio, stream) {
-//                       return Container(
-//                         color: Theme.of(context).colorScheme.background,
-//                         height: kToolbarHeight,
-//                         child: Container(),
-//                       );
-//                     },
-//                     stopped: () => const SizedBox.shrink(), error: () => const SizedBox.shrink());
-//               },
-//             ),
-//             SafeArea(
-//                 top: false,
-//                 bottom: height <= playerMinHeight ? true : false,
-//                 child: DetailedPlayer(isAttachedToHomeScreen: isAttachedToHomeScreen,))
-//           ],
-//         );
-//       },
-//       child: child,
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import '../../audio_player_base.dart' show ApbPlayerWidget, getPixelFromPercentage, percentageFromValueInRange, playerExpandProgress, playerMinHeightPercentage;
+
+
+class ApbPlayerWrapper extends StatelessWidget {
+  const ApbPlayerWrapper({required this.child, super.key});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        child,
+        ApbPlayerWidget(),
+      ],
+    );
+  }
+}
+
+class ApbPlayerWrapperWithBottomBar extends StatelessWidget {
+  const ApbPlayerWrapperWithBottomBar({required this.child, super.key, required this.bottomNavigationBar});
+  final BottomNavigationBar bottomNavigationBar;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: ValueListenableBuilder(
+        valueListenable: playerExpandProgress,
+        builder: (context, heightPercentage, child) {
+          final height = percentageFromValueInRange(
+              min: playerMinHeightPercentage,
+              max: 1,
+              value: heightPercentage);
+          return SizedBox(
+            height: kBottomNavigationBarHeight -
+                kBottomNavigationBarHeight * height,
+            child: Transform.translate(
+              offset: Offset(0.0, kBottomNavigationBarHeight * height),
+              child: child,
+            ),
+          );
+        },
+        child: SafeArea(child: Wrap(children: [bottomNavigationBar],)),
+      ),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+      children: [
+        child,
+        ApbPlayerWidget(),
+      ],),
+    );
+  }
+}

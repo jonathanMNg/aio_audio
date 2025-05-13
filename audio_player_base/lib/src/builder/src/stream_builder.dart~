@@ -33,14 +33,12 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
   final Widget Function(
     BuildContext context,
     ApbPlayerStateStream psStream,
-    ApbPlayablePlaylist playlist,
     ApbPlayableAudio loadingAudio,
   )
   loadingBuilder;
   final Widget Function(
     BuildContext context,
     ApbPlayerStateStream psStream,
-      ApbPlayablePlaylist playlist,
     ApbPlayableAudio playingAudio,
   )
   playingBuilder;
@@ -68,7 +66,7 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
                 stream: state.playerStream!.currentIndexStream,
                 itemBuilder: (context, currentIndex) {
                   final currentAudio = state.playlist!.audios![currentIndex];
-                  return loadingBuilder(context, state.playerStream!, state.playlist!, currentAudio);
+                  return loadingBuilder(context, state.playerStream!, currentAudio);
                 }
             );
           case ApbPlayerStateStatus.playing:
@@ -77,7 +75,7 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
                 stream: state.playerStream!.currentIndexStream,
                 itemBuilder: (context, currentIndex) {
                   final currentAudio = state.playlist!.audios![currentIndex];
-                  return playingBuilder(context, state.playerStream!, state.playlist!, currentAudio);
+                  return playingBuilder(context, state.playerStream!, currentAudio);
                 }
             );
           case ApbPlayerStateStatus.stopped:

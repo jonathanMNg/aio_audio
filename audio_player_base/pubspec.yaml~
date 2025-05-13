@@ -22,6 +22,7 @@ dependencies:
   path_provider: ^2.1.5
   json_annotation: ^4.9.0
   cached_network_image: ^3.4.1
+  audio_video_progress_bar: ^2.0.3
 
 dev_dependencies:
   flutter_lints: ^5.0.0

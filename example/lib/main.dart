@@ -61,24 +61,38 @@ class _MyHomePageState extends State<MyHomePage> {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text(widget.title),
+        ApbPlayerWrapperWithBottomBar(
+          bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.business),
+              label: 'Business',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              label: 'School',
+            ),
+          ]),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: Text(widget.title),
+            ),
+            body: Column(
+              children: [
+                _buildFirstControlRow(),
+                _buildSecondControlRow(),
+                _buildProgressBar(),
+                _buildAudioList(),
+                _buildNewAudioItem(),
+              ],
+            ),
+            // body: ApbFullPlayer(audio: audio),
           ),
-          body: Column(
-            children: [
-              _buildFirstControlRow(),
-              _buildSecondControlRow(),
-              _buildProgressBar(),
-              _buildAudioList(),
-              _buildNewAudioItem(),
-            ],
-          ),
-          // body: ApbFullPlayer(audio: audio),
         ),
-
-        _buildItemTracker(),
       ],
     );
   }
@@ -101,11 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  Widget _buildItemTracker() {
-    return ApbPlayerWidget();
-  }
-
   Widget _buildSecondControlRow() {
     return Row(
       children: [

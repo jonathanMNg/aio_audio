@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:audio_player_base/audio_player_base.dart';
+import 'package:audio_player_base/src/builder/src/player_builder/draggable_scrollable_player.dart';
 import 'package:audio_player_base/src/builder/src/stream_builder.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,15 +13,21 @@ part 'player_mini.dart';
 
 part 'player_full.dart';
 
-const double playerMinHeight = 70;
-// const double miniPlayerPercentageDeclaration = 0.001;
-// const double playerMaxHeightRatioToScreen = 1;
-//
-// final ValueNotifier<double> playerExpandProgress = ValueNotifier(
-//   playerMinHeight,
-// );
+const double playerMinHeightPercentage = 0.1;
+const double maxHeight = 1.0;
+
+final ValueNotifier<double> playerExpandProgress = ValueNotifier(playerMinHeightPercentage);
+
 double getMaxImgSize(BuildContext context) {
   return MediaQuery.of(context).size.height * 0.5;
+}
+
+double percentageFromValueInRange({required final double min, max, value}) {
+  return (value - min) / (max - min);
+}
+
+double getPixelFromPercentage(BuildContext context, double percent) {
+  return MediaQuery.of(context).size.height * percent;
 }
 
 class ApbPlayerWidget extends StatelessWidget {
@@ -36,8 +42,8 @@ class ApbPlayerWidget extends StatelessWidget {
       loadingBuilder: (context, audio) {
         return ApbMiniPlayer(audio: audio);
       },
-      playingBuilder: (context, audio) {
-        return ApbFullPlayer(audio: audio);
+      playingBuilder: (context, playlist, audio) {
+        return ApbScrollablePlayer(playlist: playlist, audio: audio,);
       },
     );
   }
@@ -55,31 +61,21 @@ class ApbPlayerWidgetBuilder extends StatelessWidget {
   startUpBuilder;
   final Widget Function(BuildContext context, ApbPlayableAudio audio)
   loadingBuilder;
-  final Widget Function(BuildContext context, ApbPlayableAudio audio)
+  final Widget Function(BuildContext context, ApbPlayablePlaylist playlist, ApbPlayableAudio audio)
   playingBuilder;
 
   @override
   Widget build(BuildContext context) {
     return ApbActiveStreamBuilder(
-      loadingBuilder:
-          (
-            BuildContext context,
-            ApbPlayerStateStream psStream,
-            ApbPlayableAudio loadingAudio,
-          ) {
-            return loadingBuilder(context, loadingAudio);
-          },
+      loadingBuilder: (context, psStream, playlist, loadingAudio) {
+        return loadingBuilder(context, loadingAudio);
+      },
       defaultBuilder: (BuildContext context, ApbPlayableAudio? audio) {
         return SizedBox.shrink();
       },
-      playingBuilder:
-          (
-            BuildContext context,
-            ApbPlayerStateStream psStream,
-            ApbPlayableAudio playingAudio,
-          ) {
-            return playingBuilder(context, playingAudio);
-          },
+      playingBuilder: (context, psStream, playlist, playingAudio) {
+        return playingBuilder(context, playlist, playingAudio);
+      },
       errorBuilder: (context) => SizedBox.shrink(),
       stoppedBuilder: (context) => SizedBox.shrink(),
     );

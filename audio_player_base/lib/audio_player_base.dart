@@ -1,3 +1,4 @@
+import 'package:audio_player_base/src/builder/builder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,7 +10,7 @@ export 'src/player/audio_player_handler.dart';
 export 'src/service/yt_service.dart';
 export 'src/component/component.dart';
 export 'src/repository/repository.dart';
-
+export 'src/wrapper/wrapper.dart';
 class AudioPlayerBase {
   AudioPlayerBase._internal();
 
