@@ -104,7 +104,6 @@ class ApbPlayerWidgetBuilder extends StatelessWidget {
       defaultBuilder: (BuildContext context) {
         return SizedBox.shrink();
       },
-      startUpBuilder: (context, audio) => startUpBuilder(context, audio),
       playingBuilder: (context, psStream, playlist, playingAudio) {
         return playingBuilder(context, playlist, playingAudio);
       },

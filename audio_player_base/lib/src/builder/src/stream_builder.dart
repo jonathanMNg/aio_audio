@@ -46,6 +46,8 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
   playingBuilder;
   final Widget Function(BuildContext context)? stoppedBuilder;
   final Widget Function(BuildContext context)? errorBuilder;
+  final Widget Function(BuildContext context, ApbPlayableAudio audio)?
+  startUpBuilder;
 
   const ApbActiveStreamBuilder({
     super.key,
@@ -53,6 +55,7 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
     required this.defaultBuilder,
     required this.playingBuilder,
     this.stoppedBuilder, this.errorBuilder,
+    this.startUpBuilder
   });
 
   @override
@@ -61,7 +64,7 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case ApbPlayerStateStatus.startUp:
-            return defaultBuilder(context);
+            return startUpBuilder?.call(context, state.initialAudio!) ?? defaultBuilder(context);
           case ApbPlayerStateStatus.loading:
             return ApbCustomStreamBuilder<int>(
                 defaultBuilder: (context) => defaultBuilder(context),

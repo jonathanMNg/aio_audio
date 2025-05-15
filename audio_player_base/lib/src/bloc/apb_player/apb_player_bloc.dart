@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:just_audio/just_audio.dart';
+
 export 'package:just_audio/just_audio.dart' show LoopMode;
 
 part 'apb_player_event.dart';
@@ -98,7 +99,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       List<ApbPlayableAudio> tracks = [];
       int? trackIndex;
       if (audio != null) {
-        selectedAudio = audio;
+        selectedAudio = await audioProvider.get(audio.id!);
         selectedPlaylist = await playlistProvider.get(
           selectedAudio.playlistId!,
         );

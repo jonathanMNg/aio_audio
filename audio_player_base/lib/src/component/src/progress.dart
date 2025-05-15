@@ -28,6 +28,10 @@ class ApbProgressWidget extends StatelessWidget {
           return defaultBuilder(
               context, loadingAudio.progress ?? 0);
         },
+        startUpBuilder: (context, startUpAudio) {
+          return defaultBuilder(
+              context, startUpAudio.progress ?? 0);
+        },
         defaultBuilder: (context) {
           return defaultBuilder(
               context, audio?.progress ?? 0);

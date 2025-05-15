@@ -24,7 +24,7 @@ class ApbMiniPlayer extends StatelessWidget {
                       (context, progress, duration, position) =>
                       LinearProgressIndicator(value: progress, minHeight: 5,),
                   defaultBuilder: (context, progress) {
-                    return LinearProgressIndicator(minHeight: 5,);
+                    return LinearProgressIndicator(minHeight: 5, value: progress,);
                   },
                 ),
                 Row(
@@ -56,7 +56,7 @@ class ApbMiniPlayer extends StatelessWidget {
                         playWidget: IconButton(
                           onPressed: () {
                             context.read<ApbPlayerBloc>().add(
-                              const ApbResumeEvent(),
+                              ApbPlayAudioEvent(audio),
                             );
                           },
                           icon: Icon(Icons.play_arrow),
