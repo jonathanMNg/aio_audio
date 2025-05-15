@@ -5,70 +5,76 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ApbProgressWidget extends StatelessWidget {
-  const ApbProgressWidget(
-      {super.key, required this.playingBuilder, required this.defaultBuilder, this.audio});
+  const ApbProgressWidget({
+    super.key,
+    required this.playingBuilder,
+    required this.defaultBuilder,
+    this.audio,
+    required this.loadingBuilder,
+  });
 
-  final Widget Function(BuildContext context, double progress, Duration? duration, Duration? position) playingBuilder;
+  final Widget Function(
+    BuildContext context,
+    double progress,
+    Duration? duration,
+    Duration? position,
+  )
+  playingBuilder;
+  final Widget Function(BuildContext context) loadingBuilder;
   final Widget Function(BuildContext context, double progress) defaultBuilder;
   final ApbPlayableAudio? audio;
 
   @override
   Widget build(BuildContext context) {
     return ApbActiveStreamBuilder(
-        loadingBuilder: (context, psStream, playlist, loadingAudio) {
-          if (audio != null) {
-            if (audio?.id == loadingAudio.id) {
-              return defaultBuilder(
-                  context, loadingAudio.progress ?? 0);
-            }
-            else {
-              return defaultBuilder(context, audio?.progress ?? 0);
-            }
+      loadingBuilder: (context, psStream, playlist, loadingAudio) {
+        if (audio != null) {
+          if (audio?.id == loadingAudio.id) {
+            return loadingBuilder(context);
+          } else {
+            return defaultBuilder(context, audio?.progress ?? 0);
           }
-          return defaultBuilder(
-              context, loadingAudio.progress ?? 0);
-        },
-        startUpBuilder: (context, startUpAudio) {
-          return defaultBuilder(
-              context, startUpAudio.progress ?? 0);
-        },
-        defaultBuilder: (context) {
-          return defaultBuilder(
-              context, audio?.progress ?? 0);
-        },
-        playingBuilder: (context, psStream, playlist, playingAudio) {
-          final child = ApbCustomStreamBuilder<(Duration?, Duration?)>(
-              defaultBuilder: (context) {
-                return defaultBuilder(
-                    context, audio?.progress ?? 0);
-              },
-              stream: Rx.combineLatest2(
-                  psStream.positionStream, psStream.durationStream, (position,
-                  duration) => (position, duration)),
-              itemBuilder: (context, data) {
-                final (position, duration) = data;
-                double? progress;
-                if (duration == null || position == null) {
-                  progress = null;
-                }
-                else {
-                  progress = position.inMilliseconds / duration.inMilliseconds;
-                }
-                return playingBuilder(context, progress ?? 0, duration, position);
-              });
-          if (audio != null) {
-            if (audio?.id == playingAudio.id) {
-              return child;
+        }
+        return loadingBuilder(context);
+      },
+      startUpBuilder: (context, startUpAudio) {
+        return defaultBuilder(context, startUpAudio.progress ?? 0);
+      },
+      defaultBuilder: (context) {
+        return defaultBuilder(context, audio?.progress ?? 0);
+      },
+      playingBuilder: (context, psStream, playlist, playingAudio) {
+        final child = ApbCustomStreamBuilder<(Duration?, Duration?)>(
+          defaultBuilder: (context) {
+            return defaultBuilder(context, audio?.progress ?? 0);
+          },
+          stream: Rx.combineLatest2(
+            psStream.positionStream,
+            psStream.durationStream,
+            (position, duration) => (position, duration),
+          ),
+          itemBuilder: (context, data) {
+            final (position, duration) = data;
+            double? progress;
+            if (duration == null || position == null) {
+              progress = null;
+            } else {
+              progress = position.inMilliseconds / duration.inMilliseconds;
             }
-            else {
-              return defaultBuilder(
-                  context, audio?.progress ?? 0);
-            }
-          }
-          else {
+            return playingBuilder(context, progress ?? 0, duration, position);
+          },
+        );
+        if (audio != null) {
+          if (audio?.id == playingAudio.id) {
             return child;
+          } else {
+            return defaultBuilder(context, audio?.progress ?? 0);
           }
-        });
+        } else {
+          return child;
+        }
+      },
+    );
   }
 }
 
@@ -76,11 +82,13 @@ class ApbReactiveProgressWidget extends StatefulWidget {
   const ApbReactiveProgressWidget({super.key});
 
   @override
-  State<ApbReactiveProgressWidget> createState() => _ApbReactiveProgressWidgetState();
+  State<ApbReactiveProgressWidget> createState() =>
+      _ApbReactiveProgressWidgetState();
 }
 
 class _ApbReactiveProgressWidgetState extends State<ApbReactiveProgressWidget> {
   bool isDragging = false;
+
   @override
   Widget build(BuildContext context) {
     return ApbProgressWidget(
@@ -106,6 +114,9 @@ class _ApbReactiveProgressWidgetState extends State<ApbReactiveProgressWidget> {
           timeLabelLocation: TimeLabelLocation.sides,
           timeLabelType: TimeLabelType.remainingTime,
         );
+      },
+      loadingBuilder: (context) {
+        return LinearProgressIndicator();
       },
       defaultBuilder: (context, progress) {
         return LinearProgressIndicator(value: progress);

@@ -26,9 +26,6 @@ class ApbMiniPlayer extends StatelessWidget {
                   defaultBuilder: (context, progress) {
                     return LinearProgressIndicator(minHeight: 5, value: progress,);
                   },
-                  loadingBuilder: (context) {
-                    return LinearProgressIndicator(minHeight: 5,);
-                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

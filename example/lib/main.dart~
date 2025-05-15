@@ -109,7 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
         defaultBuilder: (context, progress) {
           return LinearProgressIndicator(value: progress);
         },
-        loadingBuilder: (context) => const LinearProgressIndicator(),
       ),
     );
   }
@@ -155,9 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             defaultBuilder: (context, progress) {
               return LinearProgressIndicator(value: progress);
-            },
-            loadingBuilder: (context) {
-              return LinearProgressIndicator();
             },
             audio: newMockAudio,
           ),
@@ -263,9 +259,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 defaultBuilder: (context, progress) {
                   return LinearProgressIndicator(value: progress);
-                },
-                loadingBuilder: (context) {
-                  return const LinearProgressIndicator();
                 },
                 audio: audio,
               ),
