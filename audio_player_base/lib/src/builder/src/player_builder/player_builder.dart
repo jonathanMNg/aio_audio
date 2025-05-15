@@ -2,21 +2,21 @@ import 'dart:ui';
 
 import 'package:audio_player_base/audio_player_base.dart';
 import 'package:audio_player_base/src/builder/src/player_builder/draggable_scrollable_player.dart';
-import 'package:audio_player_base/src/builder/src/stream_builder.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../component/src/image.dart';
 
 part 'player_mini.dart';
-
 part 'player_full.dart';
+part 'player_scrollable.dart';
 
-const double playerMinHeightPercentage = 0.1;
+const double playerMinHeightPercentage = 0.08;
 const double maxHeight = 1.0;
 
-final ValueNotifier<double> playerExpandProgress = ValueNotifier(playerMinHeightPercentage);
+final ValueNotifier<double> playerExpandProgress = ValueNotifier(
+  playerMinHeightPercentage,
+);
 
 double getMaxImgSize(BuildContext context) {
   return MediaQuery.of(context).size.height * 0.5;
@@ -27,11 +27,34 @@ double percentageFromValueInRange({required final double min, max, value}) {
 }
 
 double getPixelFromPercentage(BuildContext context, double percent) {
-  return MediaQuery.of(context).size.height * percent;
+  return MediaQuery.sizeOf(context).height * percent;
+}
+
+class ApbPlayerConfig {
+  const ApbPlayerConfig({
+    this.enableShuffleButton = true,
+    this.enableTimerButton = true,
+    this.enableLoopButton = true,
+    this.enableSpeedButton = true,
+    this.enableSkipForwardBackwardButton = true,
+    this.timerConfig = const ApbTimerConfig(),
+  });
+
+  final bool enableShuffleButton;
+  final bool enableTimerButton;
+  final bool enableLoopButton;
+  final bool enableSpeedButton;
+  final bool enableSkipForwardBackwardButton;
+  final ApbTimerConfig timerConfig;
 }
 
 class ApbPlayerWidget extends StatelessWidget {
-  const ApbPlayerWidget({super.key});
+  const ApbPlayerWidget({
+    super.key,
+    required this.config,
+  });
+
+  final ApbPlayerConfig config;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +66,11 @@ class ApbPlayerWidget extends StatelessWidget {
         return ApbMiniPlayer(audio: audio);
       },
       playingBuilder: (context, playlist, audio) {
-        return ApbScrollablePlayer(playlist: playlist, audio: audio,);
+        return ApbScrollablePlayer(
+          playlist: playlist,
+          audio: audio,
+          config: config,
+        );
       },
     );
   }
@@ -61,7 +88,11 @@ class ApbPlayerWidgetBuilder extends StatelessWidget {
   startUpBuilder;
   final Widget Function(BuildContext context, ApbPlayableAudio audio)
   loadingBuilder;
-  final Widget Function(BuildContext context, ApbPlayablePlaylist playlist, ApbPlayableAudio audio)
+  final Widget Function(
+    BuildContext context,
+    ApbPlayablePlaylist playlist,
+    ApbPlayableAudio audio,
+  )
   playingBuilder;
 
   @override
@@ -70,7 +101,7 @@ class ApbPlayerWidgetBuilder extends StatelessWidget {
       loadingBuilder: (context, psStream, playlist, loadingAudio) {
         return loadingBuilder(context, loadingAudio);
       },
-      defaultBuilder: (BuildContext context, ApbPlayableAudio? audio) {
+      defaultBuilder: (BuildContext context) {
         return SizedBox.shrink();
       },
       playingBuilder: (context, psStream, playlist, playingAudio) {

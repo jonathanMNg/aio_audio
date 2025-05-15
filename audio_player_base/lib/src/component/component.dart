@@ -5,3 +5,5 @@ export 'src/loop.dart';
 export 'src/shuffle.dart';
 export 'src/speed.dart';
 export 'src/skip_forward_backward.dart';
+export 'src/image.dart';
+export 'src/timer.dart';

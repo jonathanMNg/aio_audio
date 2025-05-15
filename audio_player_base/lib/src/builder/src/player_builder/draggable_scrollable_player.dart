@@ -47,7 +47,7 @@ class _DraggableScrollablePlayerState extends State<DraggableScrollablePlayer> {
           return ValueListenableBuilder(
             valueListenable: widget.valueNotifier,
             builder: (context, heightPercentage, child) {
-              bool isMini = heightPercentage <= playerMinHeightPercentage;
+              bool isMini = heightPercentage == playerMinHeightPercentage;
               return SingleChildScrollView(controller: scrollController, child: widget.builder(context, isMini),);
             }
           );

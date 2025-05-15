@@ -138,6 +138,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
         initialIndex: trackIndex,
         initialPosition: initialPos,
       );
+
       _audioPlayerService.audioPlayer!.play();
       emit(
         state.copyWith(

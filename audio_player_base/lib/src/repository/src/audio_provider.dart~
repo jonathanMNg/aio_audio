@@ -26,4 +26,5 @@ abstract interface class ApbAudioProvider<T extends ApbPlayableAudio> {
   Future<ApbPlayableAudio?> getLastPlayed() {
     throw UnimplementedError();
   }
+
 }

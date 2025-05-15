@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
-import '../../audio_player_base.dart' show ApbPlayerWidget, getPixelFromPercentage, percentageFromValueInRange, playerExpandProgress, playerMinHeightPercentage;
-
+import '../../audio_player_base.dart'
+    show
+        ApbPlayerConfig,
+        ApbPlayerWidget,
+        percentageFromValueInRange,
+        playerExpandProgress,
+        playerMinHeightPercentage;
 
 class ApbPlayerWrapper extends StatelessWidget {
-  const ApbPlayerWrapper({required this.child, super.key});
+  const ApbPlayerWrapper({
+    required this.child,
+    super.key,
+    this.config = const ApbPlayerConfig(),
+  });
+
   final Widget child;
+  final ApbPlayerConfig config;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomCenter,
-      children: [
-        child,
-        ApbPlayerWidget(),
-      ],
+      children: [child, ApbPlayerWidget(config: config,)],
     );
   }
 }
 
 class ApbPlayerWrapperWithBottomBar extends StatelessWidget {
-  const ApbPlayerWrapperWithBottomBar({required this.child, super.key, required this.bottomNavigationBar});
+  const ApbPlayerWrapperWithBottomBar({
+    required this.child,
+    super.key,
+    required this.bottomNavigationBar,
+    this.config = const ApbPlayerConfig(),
+  });
+
   final BottomNavigationBar bottomNavigationBar;
   final Widget child;
+  final ApbPlayerConfig config;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +45,13 @@ class ApbPlayerWrapperWithBottomBar extends StatelessWidget {
         valueListenable: playerExpandProgress,
         builder: (context, heightPercentage, child) {
           final height = percentageFromValueInRange(
-              min: playerMinHeightPercentage,
-              max: 1,
-              value: heightPercentage);
+            min: playerMinHeightPercentage,
+            max: 1,
+            value: heightPercentage,
+          );
           return SizedBox(
-            height: kBottomNavigationBarHeight -
+            height:
+                kBottomNavigationBarHeight -
                 kBottomNavigationBarHeight * height,
             child: Transform.translate(
               offset: Offset(0.0, kBottomNavigationBarHeight * height),
@@ -40,14 +59,12 @@ class ApbPlayerWrapperWithBottomBar extends StatelessWidget {
             ),
           );
         },
-        child: SafeArea(child: Wrap(children: [bottomNavigationBar],)),
+        child: SafeArea(child: Wrap(children: [bottomNavigationBar])),
       ),
       body: Stack(
         alignment: Alignment.bottomCenter,
-      children: [
-        child,
-        ApbPlayerWidget(),
-      ],),
+        children: [child, ApbPlayerWidget(config: config,)],
+      ),
     );
   }
 }

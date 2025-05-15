@@ -23,7 +23,7 @@ class ApbMiniPlayer extends StatelessWidget {
                   playingBuilder:
                       (context, progress, duration, position) =>
                       LinearProgressIndicator(value: progress, minHeight: 5,),
-                  defaultBuilder: (context, progress) {
+                  defaultBuilder: (context, progress, duration, position) {
                     return LinearProgressIndicator(minHeight: 5,);
                   },
                 ),

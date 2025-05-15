@@ -1,6 +1,5 @@
 import 'package:audio_player_base/audio_player_base.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:rxdart/rxdart.dart';
 class ApbPlayerStateStream {
   static ApbPlayerStateStream? _instance;
   final AudioPlayer audioPlayer;
@@ -20,7 +19,7 @@ class ApbPlayerStateStream {
   Stream<PlaybackEvent> get playbackEventStream => audioPlayer.playbackEventStream;
   Stream<Duration?> get durationStream => audioPlayer.durationStream;
   Stream<LoopMode> get loopModeStream => audioPlayer.loopModeStream;
-  Stream<Duration> get positionStream => audioPlayer.positionStream.throttleTime(Duration(seconds: 1));
+  Stream<Duration> get positionStream => audioPlayer.positionStream;
   Stream<double> get speedStream => audioPlayer.speedStream;
   Stream<int?> get currentIndexStream => audioPlayer.currentIndexStream;
   Stream<bool> get hasNextStream => audioPlayer.hasNextStream;

@@ -29,7 +29,7 @@ class ApbCustomStreamBuilder<T> extends StatelessWidget {
 }
 
 class ApbActiveStreamBuilder<T> extends StatelessWidget {
-  final Widget Function(BuildContext context, ApbPlayableAudio? audio) defaultBuilder;
+  final Widget Function(BuildContext context) defaultBuilder;
   final Widget Function(
     BuildContext context,
     ApbPlayerStateStream psStream,
@@ -61,10 +61,10 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case ApbPlayerStateStatus.startUp:
-            return defaultBuilder(context, state.initialAudio);
+            return defaultBuilder(context);
           case ApbPlayerStateStatus.loading:
             return ApbCustomStreamBuilder<int>(
-                defaultBuilder: (context) => defaultBuilder(context, state.initialAudio),
+                defaultBuilder: (context) => defaultBuilder(context),
                 stream: state.playerStream!.currentIndexStream,
                 itemBuilder: (context, currentIndex) {
                   final currentAudio = state.playlist!.audios![currentIndex];
@@ -73,7 +73,7 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
             );
           case ApbPlayerStateStatus.playing:
             return ApbCustomStreamBuilder<int>(
-                defaultBuilder: (context) => defaultBuilder(context, state.initialAudio),
+                defaultBuilder: (context) => defaultBuilder(context),
                 stream: state.playerStream!.currentIndexStream,
                 itemBuilder: (context, currentIndex) {
                   final currentAudio = state.playlist!.audios![currentIndex];
@@ -81,13 +81,13 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
                 }
             );
           case ApbPlayerStateStatus.stopped:
-            return stoppedBuilder?.call(context) ?? defaultBuilder(context, state.initialAudio);
+            return stoppedBuilder?.call(context) ?? defaultBuilder(context);
           case ApbPlayerStateStatus.error:
-            return errorBuilder?.call(context) ?? defaultBuilder(context, state.initialAudio);
+            return errorBuilder?.call(context) ?? defaultBuilder(context);
           case ApbPlayerStateStatus.idle:
-            return defaultBuilder(context, state.initialAudio);
+            return defaultBuilder(context);
           default:
-            return defaultBuilder(context, state.initialAudio);
+            return defaultBuilder(context);
         }
       },
     );

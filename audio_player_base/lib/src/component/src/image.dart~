@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ApbCachedImageBuilder extends StatelessWidget {
+class CachedImageBuilder extends StatelessWidget {
   final String imageUrl;
   final double? height;
   final double? width;
 
-  const ApbCachedImageBuilder(
+  const CachedImageBuilder(
       {super.key, required this.imageUrl, this.width, this.height});
 
   @override
@@ -28,7 +28,7 @@ class ApbCachedImageBuilder extends StatelessWidget {
               ),
             ),
             errorWidget: (context, object, errorWidget) =>
-                Icon(Icons.music_note),
+                Image.asset('assets/images/failed_to_load.jpg', height: height,),
             placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
           ),

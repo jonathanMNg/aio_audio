@@ -1,14 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          tools:ignore="Instantiatable">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- ADD THESE TWO PERMISSIONS -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-- ALSO ADD THIS PERMISSION IF TARGETING SDK 34 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <application
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
         android:label="example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

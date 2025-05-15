@@ -8,7 +8,7 @@ import 'mock_audio_db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AudioPlayerBase.init();
+  await AudioPlayerBase.init(androidNotificationChannelId: 'com.example.audio_player_base');
   runApp(const MyApp());
 }
 
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
                 playlistProvider: ExamplePlaylistProvider(),
               ),
         ),
+        BlocProvider( create: (context) => ApbTimerCubit()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -58,42 +59,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        ApbPlayerWrapperWithBottomBar(
-          bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Business',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'School',
-            ),
-          ]),
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              title: Text(widget.title),
-            ),
-            body: Column(
-              children: [
-                _buildFirstControlRow(),
-                _buildSecondControlRow(),
-                _buildProgressBar(),
-                _buildAudioList(),
-                _buildNewAudioItem(),
-              ],
-            ),
-            // body: ApbFullPlayer(audio: audio),
-          ),
+    return ApbPlayerWrapperWithBottomBar(
+      config: ApbPlayerConfig(enableShuffleButton: false, ),
+      bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
-      ],
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.business),
+          label: 'Business',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.school),
+          label: 'School',
+        ),
+      ],),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Column(
+          children: [
+            _buildFirstControlRow(),
+            _buildSecondControlRow(),
+            _buildProgressBar(),
+            _buildAudioList(),
+            _buildNewAudioItem(),
+          ],
+        ),
+        // body: ApbFullPlayer(audio: audio),
+      ),
     );
   }
   Widget _buildProgressBar() {
@@ -109,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
         },
-        defaultBuilder: (context, progress, duration, position) {
+        defaultBuilder: (context, progress) {
           return LinearProgressIndicator(value: progress);
         },
       ),
@@ -155,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
             playingBuilder: (context, progress, duration, position) {
               return LinearProgressIndicator(value: progress);
             },
-            defaultBuilder: (context, progress, duration, position) {
+            defaultBuilder: (context, progress) {
               return LinearProgressIndicator(value: progress);
             },
             audio: newMockAudio,
@@ -260,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 playingBuilder: (context, progress, duration, position) {
                   return LinearProgressIndicator(value: progress);
                 },
-                defaultBuilder: (context, progress, duration, position) {
+                defaultBuilder: (context, progress) {
                   return LinearProgressIndicator(value: progress);
                 },
                 audio: audio,
@@ -270,7 +267,6 @@ class _MyHomePageState extends State<MyHomePage> {
           trailing: ApbPlayPauseWidget(
             playWidget: IconButton(
               onPressed: () {
-                print(audio.name);
                 _playAudio(audio);
               },
               icon: Icon(Icons.play_arrow),
