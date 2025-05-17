@@ -1,0 +1,29 @@
+import 'package:audio_download_manager/audio_download_manager.dart';
+
+final downloadMockList = [
+  AdmDownloadModel(
+    id: '1',
+    fileName: '1.mp4',
+    url: 'https://file-examples.com/storage/fe17a1467f68237299aa605/2017/04/file_example_MP4_1920_18MG.mp4',
+  ),
+  AdmDownloadModel(
+    id: '2',
+    fileName: '2.mp4',
+    url: 'https://files.testfile.org/Video%20MP4%2FRoad%20-%20testfile.org.mp4',
+  ),
+  AdmDownloadModel(
+    id: '3',
+    fileName: '3.mp4',
+    url: 'https://files.testfile.org/Video%20MP4%2FInk%20-%20testfile.org.mp4',
+  ),
+  AdmDownloadModel(
+    id: '4',
+    fileName: '4.mp4',
+    url: 'https://files.testfile.org/Video%20MP4%2FSand%20-%20testfile.org.mp4',
+  ),
+  AdmDownloadModel(
+    id: '5',
+    fileName: '5.mp4',
+    url: 'https://files.testfile.org/Video%20MP4%2FRiver%20-%20testfile.org.mp4',
+  ),
+];

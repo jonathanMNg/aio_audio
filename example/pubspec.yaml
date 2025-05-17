@@ -15,8 +15,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   audio_player_base:
     path: ../audio_player_base
+  audio_download_manager:
+    path: ../audio_download_manager
   flutter_bloc: ^9.1.1
   audio_video_progress_bar: ^2.0.3
+  get_it: ^8.0.3
 
 dev_dependencies:
   flutter_test:

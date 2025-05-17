@@ -1,6 +1,5 @@
 import 'package:audio_player_base/audio_player_base.dart';
 import 'package:example/screen/audio.dart';
-import 'package:example/screen/download.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,4 +33,4 @@ final _bottomNavigationItems = [
   BottomNavigationBarItem(icon: Icon(Icons.download), label: 'Download'),
 ];
 
-final _screens = [AudioScreen(), DownloadScreen()];
+final _screens = [AudioScreen(), Center(child: Text('Download'))];

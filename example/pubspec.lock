@@ -9,6 +9,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.12.0"
+  audio_download_manager:
+    dependency: "direct main"
+    description:
+      path: "../audio_download_manager"
+      relative: true
+    source: path
+    version: "0.0.1"
   audio_player_base:
     dependency: "direct main"
     description:
@@ -56,6 +63,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  background_downloader:
+    dependency: transitive
+    description:
+      name: background_downloader
+      sha256: "3a796f29f0834b3e5698e7ac2a39e04939734395420349ff22e1ac2c73a0f73d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.1"
   bloc:
     dependency: transitive
     description:
@@ -215,8 +230,16 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  get_it:
+  freezed_annotation:
     dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.4"
+  get_it:
+    dependency: "direct main"
     description:
       name: get_it
       sha256: f126a3e286b7f5b578bf436d5592968706c4c1de28a228b870ce375d9f743103
@@ -341,6 +364,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: c8245ada5f1717ed44271ed1c26b8ce85ca3228fd2ffdb75468ab01979309d61
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   matcher:
     dependency: transitive
     description:
@@ -365,6 +396,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   nested:
     dependency: transitive
     description:
