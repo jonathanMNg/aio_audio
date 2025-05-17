@@ -1,0 +1,13 @@
+import 'package:audio_download_manager/audio_download_manager.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'adm_download_item_event.dart';
+part 'adm_download_item_state.dart';
+
+class AdmDownloadItemBloc extends Bloc<AdmDownloadItemEvent, AdmDownloadItemState> {
+  AdmDownloadItemBloc() : super(AdmDownloadItemInitial()) {
+    on<AdmDownloadItemEvent>((event, emit) {
+    });
+  }
+}

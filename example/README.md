@@ -1,6 +1,6 @@
 # example
 
-A new Flutter project.
+A example project to test the aio package
 
 ## Getting Started
 
