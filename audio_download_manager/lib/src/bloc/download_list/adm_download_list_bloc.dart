@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:audio_download_manager/audio_download_manager.dart';
 import 'package:audio_download_manager/src/service/src/download_service.dart';
 import 'package:background_downloader/background_downloader.dart';
@@ -12,6 +13,8 @@ part 'adm_download_list_state.dart';
 class AdmDownloadListBloc
     extends Bloc<AdmDownloadListEvent, AdmDownloadListState> {
   final AdmDownloadListProvider downloadListProvider;
+  StreamSubscription<TaskUpdate>? _updateSubscription;
+
   AdmDownloadListBloc({required this.downloadListProvider})
     : super(
         AdmDownloadListState(
@@ -31,52 +34,72 @@ class AdmDownloadListBloc
     on<AdmEnqueueItem>(_onAddItemToQueue);
 
     add(AdmLoadDownloadedList());
-    AdmDownloadService.instance.updates.listen((update) {
-      switch (update) {
-        case TaskStatusUpdate():
-          switch (update.status) {
-            case TaskStatus.complete:
-              final completeItem = AdmDownloadModel.fromDownloadTask(
-                update.task,
-              );
-              add(_AdmMoveItemToComplete(completeItem));
-              break;
-            case TaskStatus.enqueued:
-              final enqueuedItem = AdmDownloadModel.fromDownloadTask(
-                update.task,
-              );
-              add(_AdmMoveItemToEnqueue(enqueuedItem));
-              break;
-            case TaskStatus.running:
-              final downloadingItem = AdmDownloadModel.fromDownloadTask(
-                update.task,
-              );
-              add(_AdmMoveItemToDownloading(downloadingItem));
-              break;
-            case TaskStatus.notFound:
-            case TaskStatus.failed:
-              final failedItem = AdmDownloadModel.fromDownloadTask(update.task);
-              add(_AdmMoveItemToFailed(failedItem));
-              break;
-            case TaskStatus.canceled:
-            case TaskStatus.paused:
-            default:
-          }
-        case TaskProgressUpdate():
-          GetIt.I<AdmDownloadItemBloc>().add(
-            AdmEmitDownloadingProgress(
-              update: update,
-              taskId: update.task.taskId,
-            ),
-          );
-      }
-    });
+  }
+
+  void _startListeningToUpdates() {
+    _updateSubscription ??= AdmDownloadService.instance.updates.listen((
+        update,
+      ) {
+        switch (update) {
+          case TaskStatusUpdate():
+            switch (update.status) {
+              case TaskStatus.complete:
+                final completeItem = AdmDownloadModel.fromDownloadTask(
+                  update.task,
+                );
+                add(_AdmMoveItemToComplete(completeItem));
+                break;
+              case TaskStatus.enqueued:
+                final enqueuedItem = AdmDownloadModel.fromDownloadTask(
+                  update.task,
+                );
+                add(_AdmMoveItemToEnqueue(enqueuedItem));
+                break;
+              case TaskStatus.running:
+                final downloadingItem = AdmDownloadModel.fromDownloadTask(
+                  update.task,
+                );
+                add(_AdmMoveItemToDownloading(downloadingItem));
+                break;
+              case TaskStatus.notFound:
+              case TaskStatus.failed:
+                final failedItem = AdmDownloadModel.fromDownloadTask(
+                  update.task,
+                );
+                add(_AdmMoveItemToFailed(failedItem));
+                break;
+              case TaskStatus.canceled:
+              case TaskStatus.paused:
+              default:
+            }
+          case TaskProgressUpdate():
+            GetIt.I<AdmDownloadItemBloc>().add(
+              AdmEmitDownloadingProgress(
+                update: update,
+                taskId: update.task.taskId,
+              ),
+            );
+        }
+      });
+  }
+
+  void _stopListeningToUpdates() {
+    _updateSubscription?.cancel();
+    _updateSubscription = null;
+    AdmDownloadService.instance.destroy();
+  }
+
+  void _checkAndHandleEmptyDownloads(Emitter<AdmDownloadListState> emit) {
+    if (state.downloadingList.isEmpty && state.enqueuedList.isEmpty) {
+      _stopListeningToUpdates();
+    }
   }
 
   void _onAddItemToQueue(
     AdmEnqueueItem event,
     Emitter<AdmDownloadListState> emit,
   ) async {
+    _startListeningToUpdates();
     final download = event.item;
     String url = download.url!;
     final task = DownloadTask(
@@ -137,6 +160,7 @@ class AdmDownloadListBloc
         downloadingList: downloadingList,
       ),
     );
+    _checkAndHandleEmptyDownloads(emit);
   }
 
   void _onFailedDownload(
@@ -151,6 +175,7 @@ class AdmDownloadListBloc
     emit(
       state.copyWith(failedList: failedList, downloadingList: downloadingList),
     );
+    _checkAndHandleEmptyDownloads(emit);
   }
 
   void _onLoadDownloadedList(
@@ -178,7 +203,9 @@ class AdmDownloadListBloc
     );
   }
 
-  // Future<void> _init() async {
-  //
-  // }
+  @override
+  Future<void> close() {
+    _stopListeningToUpdates();
+    return super.close();
+  }
 }

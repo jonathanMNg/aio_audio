@@ -4,32 +4,53 @@ class AdmDownloadService {
   AdmDownloadService._();
 
   static AdmDownloadService? _instance;
-  final FileDownloader _downloader = FileDownloader();
+  FileDownloader? _downloader;
 
   static AdmDownloadService get instance {
     _instance ??= AdmDownloadService._();
     return _instance!;
   }
 
-  Future<void> configure({dynamic globalConfig, dynamic androidConfig, dynamic iOSConfig, dynamic desktopConfig}) async {
-    await _downloader.configure(globalConfig: globalConfig);
+  void _ensureInitialized() {
+    _downloader ??= FileDownloader();
+  }
+
+  Future<void> configure({
+    dynamic globalConfig,
+    dynamic androidConfig,
+    dynamic iOSConfig,
+    dynamic desktopConfig,
+  }) async {
+    _ensureInitialized();
+    await _downloader!.configure(globalConfig: globalConfig);
   }
 
   Future<void> enqueue(DownloadTask task) async {
-    await _downloader.enqueue(task);
+    _ensureInitialized();
+    await _downloader!.enqueue(task);
   }
 
-  Stream<TaskUpdate> get updates => _downloader.updates;
+  Stream<TaskUpdate> get updates {
+    _ensureInitialized();
+    return _downloader!.updates;
+  }
 
   Future<void> cancel(DownloadTask task) async {
-    await _downloader.cancel(task);
+    _ensureInitialized();
+    await _downloader!.cancel(task);
   }
 
   Future<void> pause(DownloadTask task) async {
-    await _downloader.pause(task);
+    _ensureInitialized();
+    await _downloader!.pause(task);
   }
 
   Future<void> resume(DownloadTask task) async {
-    await _downloader.resume(task);
+    _ensureInitialized();
+    await _downloader!.resume(task);
+  }
+
+  void destroy() {
+    _downloader = null;
   }
 }
