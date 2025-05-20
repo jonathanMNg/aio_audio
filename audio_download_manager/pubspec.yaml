@@ -14,15 +14,10 @@ dependencies:
   path_provider: ^2.1.5
   get_it: ^8.0.3
   path: ^1.9.1
-  freezed_annotation: ^2.4.4
-  json_annotation: ^4.9.0
   equatable: ^2.0.7
   flutter_bloc: 9.1.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0
-  build_runner: any
-  json_serializable: ^6.8.0
-  freezed: ^2.5.7
 
 flutter:

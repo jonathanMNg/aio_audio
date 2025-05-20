@@ -18,7 +18,6 @@ dependencies:
   equatable: ^2.0.7
   rxdart: ^0.28.0
   hydrated_bloc: ^10.0.0
-  path_provider: ^2.1.5
   json_annotation: ^4.9.0
   cached_network_image: ^3.4.1
   audio_video_progress_bar: ^2.0.3

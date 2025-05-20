@@ -1,10 +1,12 @@
 import 'package:background_downloader/background_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AdmDownloadService {
   AdmDownloadService._();
 
   static AdmDownloadService? _instance;
   FileDownloader? _downloader;
+  String? _downloadPath;
 
   static AdmDownloadService get instance {
     _instance ??= AdmDownloadService._();
@@ -23,6 +25,12 @@ class AdmDownloadService {
   }) async {
     _ensureInitialized();
     await _downloader!.configure(globalConfig: globalConfig);
+  }
+
+  Future<String> getDownloadPath() async {
+    _ensureInitialized();
+    _downloadPath ??= (await getApplicationDocumentsDirectory()).path;
+    return _downloadPath!;
   }
 
   Future<void> enqueue(DownloadTask task) async {
