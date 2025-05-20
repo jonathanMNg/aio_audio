@@ -33,7 +33,6 @@ class AdmDownloadModel {
       url: task.url,
       fileName: task.filename,
       directory: task.directory,
-
     );
   }
 

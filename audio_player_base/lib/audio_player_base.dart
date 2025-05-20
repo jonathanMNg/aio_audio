@@ -15,6 +15,7 @@ export 'src/service/yt_service.dart';
 export 'src/component/component.dart';
 export 'src/repository/repository.dart';
 export 'src/wrapper/wrapper.dart';
+export 'src/bloc_provider/bloc_provider.dart';
 
 typedef ApbAudioPositionTrackerCallback =
     void Function(String audioId, Duration position, Duration duration);
@@ -48,7 +49,7 @@ class AudioPlayerBase {
       androidNotificationOngoing: true,
       handlePlayerChanged: (mediaItemStream, positionStream) {
         final Stream<Duration?>? throttledPositionStream = positionStream
-            ?.throttleTime(Duration(seconds: 1));
+            ?.throttleTime(Duration(seconds: 2));
         if (mediaItemStream != null && throttledPositionStream != null) {
           final audioTrackerStream = Rx.combineLatest2(
             mediaItemStream,

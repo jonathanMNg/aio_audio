@@ -5,8 +5,6 @@ import 'package:example/provider/audio/example_playlist_provider.dart';
 import 'package:example/provider/download/example_download_list_provider.dart';
 import 'package:example/screen/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,26 +18,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create:
-              (context) => ApbPlayerBloc(
-            audioProvider: ExampleAudioProvider(),
-            playlistProvider: ExamplePlaylistProvider(),
+    return ApbBlocProvider(
+      audioProvider: ExampleAudioProvider(),
+      playlistProvider: ExamplePlaylistProvider(),
+      child: AdmBlocProvider(
+        listProvider: ExampleDownloadListProvider(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
           ),
-
+          home: const HomeScreen(),
         ),
-        BlocProvider( create: (context) => ApbTimerCubit()),
-        BlocProvider( create: (context) => AdmDownloadListBloc(downloadListProvider: ExampleDownloadListProvider())),
-        BlocProvider( create: (context) => GetIt.I<AdmDownloadItemBloc>(),)
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        ),
-        home: const HomeScreen(),
       ),
     );
   }

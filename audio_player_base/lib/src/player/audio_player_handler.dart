@@ -20,7 +20,7 @@ class ApbPlayerStateStream {
   Stream<PlaybackEvent> get playbackEventStream => audioPlayer.playbackEventStream;
   Stream<Duration?> get durationStream => audioPlayer.durationStream;
   Stream<LoopMode> get loopModeStream => audioPlayer.loopModeStream;
-  Stream<Duration> get positionStream => audioPlayer.positionStream.throttleTime(Duration(seconds: 1));
+  Stream<Duration> get positionStream => audioPlayer.positionStream;
   Stream<double> get speedStream => audioPlayer.speedStream;
   Stream<int?> get currentIndexStream => audioPlayer.currentIndexStream;
   Stream<bool> get hasNextStream => audioPlayer.hasNextStream;
