@@ -17,6 +17,7 @@ class AdmDownloadListBloc
           downloadingList: [],
           downloadedList: [],
           enqueuedList: [],
+          failedList: [],
           status: AdmDownloadListStatus.loading,
         ),
       ) {
@@ -25,6 +26,7 @@ class AdmDownloadListBloc
     on<_AdmEnqueueItem>(_onEnqueueItem);
     on<_AdmDownloadItem>(_onDownloadItem);
     on<_AdmCompleteDownload>(_onCompleteDownload);
+    on<_AdmFailedDownload>(_onFailedDownload);
     on<AdmAddItemToQueue> (_onAddItemToQueue);
 
     add(AdmLoadDownloadedList());
@@ -45,9 +47,13 @@ class AdmDownloadListBloc
                   final downloadingItem = AdmDownloadModel.fromDownloadTask(update.task);
                   add(_AdmDownloadItem(downloadingItem));
                   break;
+                case TaskStatus.notFound:
+                case TaskStatus.failed:
+                  final failedItem = AdmDownloadModel.fromDownloadTask(update.task);
+                  add(_AdmFailedDownload(failedItem));
+                  break;
                 case TaskStatus.canceled:
                 case TaskStatus.paused:
-                case TaskStatus.failed:
                 default:
               }
             case TaskProgressUpdate():
@@ -94,6 +100,11 @@ class AdmDownloadListBloc
     emit(state.copyWith(downloadedList: downloadedList, downloadingList: downloadingList));
   }
 
+  void _onFailedDownload(_AdmFailedDownload event, Emitter<AdmDownloadListState> emit) async {
+    final downloadingList = state.downloadingList.where((e) => e.id != event.item.id).toList();
+    final failedList = List<AdmDownloadModel>.from(state.failedList + [event.item]);
+    emit(state.copyWith(failedList: failedList, downloadingList: downloadingList));
+  }
 
   void _onLoadDownloadedList(
     AdmLoadDownloadedList event,

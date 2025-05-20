@@ -51,6 +51,13 @@ class _AdmCompleteDownload extends AdmDownloadListEvent {
   List<Object?> get props => [item];
 }
 
+class _AdmFailedDownload extends AdmDownloadListEvent {
+  final AdmDownloadModel item;
+  const _AdmFailedDownload(this.item);
+  @override
+  List<Object?> get props => [item];
+}
+
 class AdmAddItemToQueue extends AdmDownloadListEvent {
   final AdmDownloadModel item;
   const AdmAddItemToQueue(this.item);

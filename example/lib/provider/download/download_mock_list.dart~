@@ -4,7 +4,7 @@ final downloadMockList = [
   AdmDownloadModel(
     id: '1',
     fileName: '1.mp4',
-    url: 'https://file-examples.com/storage/fe0707c5116828d4b9ad356/2017/04/file_example_MP4_1920_18MG.mp4',
+    url: 'https://file-examples.com/storage/fe15fd9e66682b77ba42822/2017/04/file_example_MP4_1920_18MG.mp4',
   ),
   AdmDownloadModel(
     id: '2',
