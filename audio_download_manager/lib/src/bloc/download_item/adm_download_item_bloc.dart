@@ -6,11 +6,12 @@ part 'adm_download_item_event.dart';
 part 'adm_download_item_state.dart';
 
 class AdmDownloadItemBloc extends Bloc<AdmDownloadItemEvent, AdmDownloadItemState> {
-  AdmDownloadItemBloc() : super(AdmDownloadItemInitial()) {
+  AdmDownloadItemBloc() : super(AdmDownloadItemState()) {
     on<AdmAddItemToDownloading>(_onAddItemToDownloading);
   }
 
   void _onAddItemToDownloading(AdmAddItemToDownloading event, Emitter<AdmDownloadItemState> emit) {
-    emit(AdmDownloadItemLoaded(event.update));
+    // emit(state.copyWith(update: event.update, taskId: event.taskId));
+    emit(AdmDownloadItemState(update: event.update, taskId: event.taskId));
   }
 }

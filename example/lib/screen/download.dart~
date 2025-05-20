@@ -25,15 +25,15 @@ class _DownloadScreenState extends State<DownloadScreen> {
               title: Text(item.fileName!),
               trailing: BlocBuilder<AdmDownloadItemBloc, AdmDownloadItemState>(
                 builder: (context, itemState) {
-                  if(listState.downloadedList.map((e) => e.id).toList().contains(item.id)) {
-                    return Icon(Icons.done);
+                  if (itemState.taskId != null && itemState.taskId == item.id) {
+                    return CircularProgressIndicator(
+                      value: itemState.update!.progress,);
                   }
                   else if(listState.enqueuedList.map((e) => e.id).toList().contains(item.id)) {
                     return CircularProgressIndicator();
                   }
-                  else if (itemState.taskId != null && itemState.taskId == item.id) {
-                    return CircularProgressIndicator(
-                      value: itemState.update!.progress,);
+                  else if(listState.downloadedList.map((e) => e.id).toList().contains(item.id)) {
+                    return Icon(Icons.done);
                   }
                   return IconButton(onPressed: () {
                     context.read<AdmDownloadListBloc>().add(

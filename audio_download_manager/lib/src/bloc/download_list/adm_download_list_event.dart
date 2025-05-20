@@ -16,37 +16,37 @@ class AdmClearDownloadedList extends AdmDownloadListEvent {
   List<Object?> get props => [];
 }
 
-class AdmEnqueueItem extends AdmDownloadListEvent {
+class _AdmEnqueueItem extends AdmDownloadListEvent {
   final AdmDownloadModel item;
-  const AdmEnqueueItem(this.item);
+  const _AdmEnqueueItem(this.item);
   @override
   List<Object?> get props => [item];
 }
 
-class AdmRemoveItem extends AdmDownloadListEvent {
+// class AdmRemoveItem extends AdmDownloadListEvent {
+//   final AdmDownloadModel item;
+//   const AdmRemoveItem(this.item);
+//   @override
+//   List<Object?> get props => [item];
+// }
+
+// class AdmCancelItem extends AdmDownloadListEvent {
+//   final AdmDownloadModel item;
+//   const AdmCancelItem(this.item);
+//   @override
+//   List<Object?> get props => [item];
+// }
+
+class _AdmDownloadItem extends AdmDownloadListEvent {
   final AdmDownloadModel item;
-  const AdmRemoveItem(this.item);
+  const _AdmDownloadItem(this.item);
   @override
   List<Object?> get props => [item];
 }
 
-class AdmCancelItem extends AdmDownloadListEvent {
+class _AdmCompleteDownload extends AdmDownloadListEvent {
   final AdmDownloadModel item;
-  const AdmCancelItem(this.item);
-  @override
-  List<Object?> get props => [item];
-}
-
-class AdmStartDownload extends AdmDownloadListEvent {
-  final AdmDownloadModel item;
-  const AdmStartDownload(this.item);
-  @override
-  List<Object?> get props => [item];
-}
-
-class AdmCompleteDownload extends AdmDownloadListEvent {
-  final AdmDownloadModel item;
-  const AdmCompleteDownload(this.item);
+  const _AdmCompleteDownload(this.item);
   @override
   List<Object?> get props => [item];
 }

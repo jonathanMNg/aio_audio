@@ -5,8 +5,9 @@ sealed class AdmDownloadItemEvent extends Equatable {
 }
 
 class AdmAddItemToDownloading extends AdmDownloadItemEvent {
-  const AdmAddItemToDownloading(this.update);
+  const AdmAddItemToDownloading({required this.update, required this.taskId});
   final TaskProgressUpdate update;
+  final String taskId;
 
   @override
   List<Object> get props => [];

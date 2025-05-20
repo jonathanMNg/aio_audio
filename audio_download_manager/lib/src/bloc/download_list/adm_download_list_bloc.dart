@@ -22,9 +22,9 @@ class AdmDownloadListBloc
       ) {
     on<AdmLoadDownloadedList>(_onLoadDownloadedList);
     on<AdmClearDownloadedList>(_onClearDownloadedList);
-    on<AdmEnqueueItem>(_onEnqueueItem);
-    on<AdmStartDownload>(_onStartDownload);
-    on<AdmCompleteDownload>(_onCompleteDownload);
+    on<_AdmEnqueueItem>(_onEnqueueItem);
+    on<_AdmDownloadItem>(_onDownloadItem);
+    on<_AdmCompleteDownload>(_onCompleteDownload);
     on<AdmAddItemToQueue> (_onAddItemToQueue);
 
     add(AdmLoadDownloadedList());
@@ -35,22 +35,23 @@ class AdmDownloadListBloc
               switch (update.status) {
                 case TaskStatus.complete:
                   final completeItem = AdmDownloadModel.fromDownloadTask(update.task);
-                  add(AdmCompleteDownload(completeItem));
+                  add(_AdmCompleteDownload(completeItem));
+                  break;
+                case TaskStatus.enqueued:
+                  final enqueuedItem = AdmDownloadModel.fromDownloadTask(update.task);
+                  add(_AdmEnqueueItem(enqueuedItem));
+                  break;
+                case TaskStatus.running:
+                  final downloadingItem = AdmDownloadModel.fromDownloadTask(update.task);
+                  add(_AdmDownloadItem(downloadingItem));
+                  break;
                 case TaskStatus.canceled:
                 case TaskStatus.paused:
                 case TaskStatus.failed:
-                case TaskStatus.running:
-                case TaskStatus.enqueued:
-                  final enqueueItem = AdmDownloadModel.fromDownloadTask(update.task);
-                  add(AdmEnqueueItem(enqueueItem));
                 default:
               }
             case TaskProgressUpdate():
-              if(update.progress > 0) {
-                final downloadingItem = AdmDownloadModel.fromDownloadTask(update.task).copyWith(progress: update.progress);
-                add(AdmStartDownload(downloadingItem));
-                GetIt.I<AdmDownloadItemBloc>().add(AdmAddItemToDownloading(update));
-              }
+              GetIt.I<AdmDownloadItemBloc>().add(AdmAddItemToDownloading(update: update, taskId: update.task.taskId));
           }
         });
   }
@@ -64,11 +65,11 @@ class AdmDownloadListBloc
         updates: Updates.statusAndProgress,
         taskId: download.id!,
         filename: download.fileName!,
-        retries: 2);
+        retries: 3);
     await FileDownloader().enqueue(task);
   }
 
-  void _onStartDownload(AdmStartDownload event, Emitter<AdmDownloadListState> emit) async {
+  void _onDownloadItem(_AdmDownloadItem event, Emitter<AdmDownloadListState> emit) async {
 
     if(!state.downloadingList.map((e) => e.id).contains(event.item.id)) {
       final downloadingList = List<AdmDownloadModel>.from(state.downloadingList + [event.item]);
@@ -78,7 +79,7 @@ class AdmDownloadListBloc
 
 
   }
-  void _onEnqueueItem(AdmEnqueueItem event, Emitter<AdmDownloadListState> emit) async {
+  void _onEnqueueItem(_AdmEnqueueItem event, Emitter<AdmDownloadListState> emit) async {
     if(!state.enqueuedList.map((e) => e.id).contains(event.item.id)
         && !state.downloadingList.map((e) => e.id).contains(event.item.id)) {
       final enqueuedList = List<AdmDownloadModel>.from(state.enqueuedList + [event.item]);
@@ -87,7 +88,7 @@ class AdmDownloadListBloc
     
   }
 
-  void _onCompleteDownload(AdmCompleteDownload event, Emitter<AdmDownloadListState> emit) async {
+  void _onCompleteDownload(_AdmCompleteDownload event, Emitter<AdmDownloadListState> emit) async {
     final downloadingList = state.downloadingList.where((e) => e.id != event.item.id).toList();
     final downloadedList = List<AdmDownloadModel>.from(state.downloadedList + [event.item]);
     emit(state.copyWith(downloadedList: downloadedList, downloadingList: downloadingList));
