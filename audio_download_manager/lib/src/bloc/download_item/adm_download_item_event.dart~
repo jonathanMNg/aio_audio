@@ -4,8 +4,8 @@ sealed class AdmDownloadItemEvent extends Equatable {
   const AdmDownloadItemEvent();
 }
 
-class AdmEmitDownloadingProgress extends AdmDownloadItemEvent {
-  const AdmEmitDownloadingProgress({required this.update, required this.taskId});
+class AdmAddItemToDownloading extends AdmDownloadItemEvent {
+  const AdmAddItemToDownloading({required this.update, required this.taskId});
   final TaskProgressUpdate update;
   final String taskId;
 

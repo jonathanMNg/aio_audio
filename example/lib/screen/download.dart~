@@ -29,7 +29,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                   child: AdmItemBuilder(
                     defaultBuilder: (context) {
                       return IconButton(onPressed: (){
-                        context.read<AdmDownloadListBloc>().add(AdmEnqueueItem(item));
+                        context.read<AdmDownloadListBloc>().add(AdmAddItemToQueue(item));
                       }, icon: Icon(Icons.download));
                     },
                     enqueuedBuilder: (context) {
