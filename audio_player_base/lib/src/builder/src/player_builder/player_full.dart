@@ -186,7 +186,7 @@ class ApbFullPlayer extends StatelessWidget {
                                             ApbNextWidget(),
                                           ],
                                         ),
-                                        SizedBox(height: 30),
+                                        SizedBox(height: 25),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
