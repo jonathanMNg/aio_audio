@@ -177,10 +177,7 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 
   @override
   AudioSource get audioSource {
-    return ProgressiveAudioSource(
-      Uri.parse('$savedDir/${filePath!}'),
-      tag: tag,
-    );
+    return AudioSource.file('$savedDir/${filePath!}', tag: tag);
   }
 
   final String savedDir;
