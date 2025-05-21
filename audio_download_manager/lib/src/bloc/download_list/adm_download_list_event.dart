@@ -23,12 +23,12 @@ class _AdmMoveItemToEnqueue extends AdmDownloadListEvent {
   List<Object?> get props => [item];
 }
 
-// class AdmRemoveItem extends AdmDownloadListEvent {
-//   final AdmDownloadModel item;
-//   const AdmRemoveItem(this.item);
-//   @override
-//   List<Object?> get props => [item];
-// }
+class AdmDeleteItem extends AdmDownloadListEvent {
+  final String id;
+  const AdmDeleteItem(this.id);
+  @override
+  List<Object?> get props => [id];
+}
 
 // class AdmCancelItem extends AdmDownloadListEvent {
 //   final AdmDownloadModel item;

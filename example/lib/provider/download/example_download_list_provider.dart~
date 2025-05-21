@@ -10,16 +10,4 @@ class ExampleDownloadListProvider implements AdmDownloadListProvider {
   Future<List<AdmDownloadModel>> getDownloads() async {
     return [];
   }
-
-  @override
-  Future<void> delete(String id) async {
-    // TODO: implement delete
-    // throw UnimplementedError();
-  }
-
-  @override
-  Future<void> insert(AdmDownloadModel model) async {
-    // TODO: implement insert
-    // throw UnimplementedError();
-  }
 }

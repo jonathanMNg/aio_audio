@@ -31,15 +31,8 @@ class AdmDownloadListBloc
     on<_AdmMoveItemToComplete>(_onCompleteDownload);
     on<_AdmMoveItemToFailed>(_onFailedDownload);
     on<AdmEnqueueItem>(_onAddItemToQueue);
-    on<AdmDeleteItem>(_onDeleteItem);
 
     add(AdmLoadDownloadedList());
-  }
-
-  void _onDeleteItem(AdmDeleteItem event, Emitter<AdmDownloadListState> emit) async {
-    await downloadListProvider.delete(event.id);
-    final updatedDownloadedList = state.downloadedList.where((e) => e.id != event.id).toList();
-    emit(state.copyWith(downloadedList: updatedDownloadedList));
   }
 
   void _startListeningToUpdates() {
@@ -160,7 +153,6 @@ class AdmDownloadListBloc
     final downloadedList = List<AdmDownloadModel>.from(
       state.downloadedList + [event.item],
     );
-    await downloadListProvider.insert(event.item);
     emit(
       state.copyWith(
         downloadedList: downloadedList,
