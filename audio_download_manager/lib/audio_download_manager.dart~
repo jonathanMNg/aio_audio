@@ -1,6 +1,4 @@
-import 'package:audio_download_manager/src/bloc/bloc.dart';
 import 'package:audio_download_manager/src/bloc/download_item/adm_download_item_bloc.dart';
-import 'package:audio_download_manager/src/repository/repository.dart';
 import 'package:audio_download_manager/src/service/src/download_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:get_it/get_it.dart';
@@ -21,7 +19,7 @@ class AudioDownloadManager {
     return _instance!;
   }
 
-  static Future<void> init({required AdmDownloadListProvider downloadListProvider}) async {
+  static Future<void> init() async {
     await AdmDownloadService.instance.configure(
       globalConfig: [
         (Config.holdingQueue, (1, 1, 1)),
@@ -31,12 +29,5 @@ class AudioDownloadManager {
     GetIt.I.registerLazySingleton<AdmDownloadItemBloc>(
       () => AdmDownloadItemBloc(),
     );
-    GetIt.I.registerLazySingleton<AdmDownloadListBloc>(
-          () => AdmDownloadListBloc(downloadListProvider: downloadListProvider),
-    );
-  }
-
-  static Future<void> delete(String id) async {
-    GetIt.I<AdmDownloadListBloc>().add(AdmDeleteItem(id));
   }
 }

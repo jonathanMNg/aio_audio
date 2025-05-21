@@ -6,16 +6,15 @@ import 'package:get_it/get_it.dart';
 import 'bloc/download_item/adm_download_item_bloc.dart';
 
 class AdmBlocProvider extends StatelessWidget {
-  const AdmBlocProvider({super.key, required this.child, required this.listProvider});
+  const AdmBlocProvider({super.key, required this.child});
   final Widget child;
-  final AdmDownloadListProvider listProvider;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-      BlocProvider(create: (context) => AdmDownloadListBloc(downloadListProvider: listProvider)),
+      BlocProvider(create: (context) => GetIt.I<AdmDownloadListBloc>()),
       BlocProvider(create: (context) => GetIt.I<AdmDownloadItemBloc>()),
-    ], child: child);
+    ], child: child,);
   }
 }
