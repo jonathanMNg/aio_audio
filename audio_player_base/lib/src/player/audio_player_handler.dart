@@ -87,7 +87,6 @@ class ApbAudioPlayerHandler {
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
     for (final audio in audios) {
-      print(audio.audioSource);
       _playlist.add(audio);
     }
   }
