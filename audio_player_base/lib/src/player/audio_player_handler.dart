@@ -87,14 +87,8 @@ class ApbAudioPlayerHandler {
   }
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
-    final isOnline = await hasNetwork();
     for (final audio in audios) {
-      if(!isOnline && audio is ApbUrlPlayableAudio) {
-        // skip
-      }
-      else {
-        _playlist.add(audio);
-      }
+      _playlist.add(audio);
     }
   }
 }

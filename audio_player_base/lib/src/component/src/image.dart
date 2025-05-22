@@ -31,6 +31,9 @@ class ApbCachedImageBuilder extends StatelessWidget {
                 Icon(Icons.music_note),
             placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
+            errorListener: (error) {
+              // ignore
+            },
           ),
         ));
   }

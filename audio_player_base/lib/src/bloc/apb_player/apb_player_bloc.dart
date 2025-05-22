@@ -17,7 +17,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   final ApbAudioProvider audioProvider;
   final ApbAudioPlayerHandler _audioPlayerService = ApbAudioPlayerHandler();
 
-  StreamSubscription<PlayerException>? _errorSubscription;
   ApbPlayerBloc({required this.playlistProvider, required this.audioProvider})
     : super(const ApbPlayerState(status: ApbPlayerStateStatus.idle)) {
     on<ApbPlayPlaylistEvent>(_onPlayPlaylist);
@@ -162,13 +161,13 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
           status: ApbPlayerStateStatus.playing,
         ),
       );
-      _errorSubscription ??= _audioPlayerService.audioPlayer!.errorStream.listen((
+      _audioPlayerService.audioPlayer!.errorStream.listen((
         PlayerException e,
       ) {
         if (_audioPlayerService.audioPlayer!.hasNext) {
           add(ApbNextEvent());
         } else {
-          add(ApbStopPlayerEvent());
+          add(ApbPauseEvent());
         }
         // print("exception");
       });
@@ -209,7 +208,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     ApbStopPlayerEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
-    _errorSubscription?.cancel();
     await _audioPlayerService.dispose();
     emit(state.copyWith(status: ApbPlayerStateStatus.stopped));
   }
