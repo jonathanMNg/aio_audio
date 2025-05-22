@@ -1,6 +1,7 @@
 import 'package:audio_player_base/audio_player_base.dart';
+import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
-import 'package:rxdart/rxdart.dart';
+
 class ApbPlayerStateStream {
   static ApbPlayerStateStream? _instance;
   final AudioPlayer audioPlayer;
@@ -86,8 +87,27 @@ class ApbAudioPlayerHandler {
   }
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
+    final isOnline = await hasNetwork();
     for (final audio in audios) {
-      _playlist.add(audio);
+      if(!isOnline && audio is ApbUrlPlayableAudio) {
+        // skip
+      }
+      else {
+        _playlist.add(audio);
+      }
     }
+  }
+}
+
+Future<bool> hasNetwork() async {
+  return await checkUrlAvailability('https://example.com');
+}
+
+Future<bool> checkUrlAvailability(String url) async {
+  try {
+    final response = await http.head(Uri.parse(url));
+    return response.statusCode == 200;
+  } catch (e) {
+    return false;
   }
 }

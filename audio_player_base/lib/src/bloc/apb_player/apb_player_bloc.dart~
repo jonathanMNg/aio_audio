@@ -149,9 +149,9 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
         ),
       );
       _audioPlayerService.audioPlayer!.errorStream.listen((PlayerException e) {
-        // if (kDebugMode) {
-        //   throw e;
-        // }
+        if (kDebugMode) {
+          throw e;
+        }
         if(_audioPlayerService.audioPlayer!.hasNext) {
           add(ApbNextEvent());
         }
