@@ -49,13 +49,16 @@ class ApbPlayerWrapperWithBottomBar extends StatelessWidget {
             max: 1,
             value: heightPercentage,
           );
-          return SizedBox(
-            height:
-                kBottomNavigationBarHeight -
-                kBottomNavigationBarHeight * height,
-            child: Transform.translate(
-              offset: Offset(0.0, kBottomNavigationBarHeight * height),
-              child: child,
+          return SafeArea(
+            bottom: heightPercentage <= playerMinHeightPercentage + 0.005 ? true : false,
+            child: SizedBox(
+              height:
+                  kBottomNavigationBarHeight -
+                  kBottomNavigationBarHeight * height,
+              child: Transform.translate(
+                offset: Offset(0.0, kBottomNavigationBarHeight * height),
+                child: child,
+              ),
             ),
           );
         },
