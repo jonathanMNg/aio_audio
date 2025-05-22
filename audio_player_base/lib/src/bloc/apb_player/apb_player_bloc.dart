@@ -9,9 +9,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 
 export 'package:just_audio/just_audio.dart' show LoopMode;
-
 part 'apb_player_event.dart';
-
 part 'apb_player_state.dart';
 
 class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
@@ -19,6 +17,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   final ApbAudioProvider audioProvider;
   final ApbAudioPlayerHandler _audioPlayerService = ApbAudioPlayerHandler();
 
+  StreamSubscription<PlayerException>? _errorSubscription;
   ApbPlayerBloc({required this.playlistProvider, required this.audioProvider})
     : super(const ApbPlayerState(status: ApbPlayerStateStatus.idle)) {
     on<ApbPlayPlaylistEvent>(_onPlayPlaylist);
@@ -40,9 +39,18 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     add(ApbInitStartUpEvent());
   }
 
-  Future<void> _onAddAudio(ApbAddAudioEvent event, Emitter<ApbPlayerState> emit) async {
+  Future<void> _onAddAudio(
+    ApbAddAudioEvent event,
+    Emitter<ApbPlayerState> emit,
+  ) async {
     await _audioPlayerService.insertAudio(event.audio);
-    emit(state.copyWith(playlist: state.playlist?.copyWith(audios: _audioPlayerService.playlist)));
+    emit(
+      state.copyWith(
+        playlist: state.playlist?.copyWith(
+          audios: _audioPlayerService.playlist,
+        ),
+      ),
+    );
   }
 
   Future<void> _onInitStartUp(
@@ -51,8 +59,12 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   ) async {
     final lastPlayedAudio = await audioProvider.getLastPlayed();
     if (lastPlayedAudio != null) {
-      emit(state.copyWith(status: ApbPlayerStateStatus.startUp, initialAudio: lastPlayedAudio));
-
+      emit(
+        state.copyWith(
+          status: ApbPlayerStateStatus.startUp,
+          initialAudio: lastPlayedAudio,
+        ),
+      );
     }
   }
 
@@ -89,7 +101,9 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
   }) async {
     try {
       await _audioPlayerService.init();
-      _audioPlayerService.audioPlayer!.setShuffleModeEnabled(state.shuffleModeEnabled);
+      _audioPlayerService.audioPlayer!.setShuffleModeEnabled(
+        state.shuffleModeEnabled,
+      );
       _audioPlayerService.audioPlayer!.setLoopMode(state.loopMode);
       _audioPlayerService.audioPlayer!.setSpeed(state.speed);
 
@@ -148,25 +162,23 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
           status: ApbPlayerStateStatus.playing,
         ),
       );
-      _audioPlayerService.audioPlayer!.errorStream.listen((PlayerException e) {
-        // if (kDebugMode) {
-        //   throw e;
-        // }
-        if(_audioPlayerService.audioPlayer!.hasNext) {
+      _errorSubscription ??= _audioPlayerService.audioPlayer!.errorStream.listen((
+        PlayerException e,
+      ) {
+        if (_audioPlayerService.audioPlayer!.hasNext) {
           add(ApbNextEvent());
-        }
-        else {
+        } else {
           add(ApbStopPlayerEvent());
         }
         // print("exception");
       });
-    } on PlayerException catch(e) {
-      if(kDebugMode) {
+    } on PlayerException catch (e) {
+      if (kDebugMode) {
         print('playerException');
         print(e.toString());
       }
-    } on PlayerInterruptedException catch(e) {
-      if(kDebugMode) {
+    } on PlayerInterruptedException catch (e) {
+      if (kDebugMode) {
         print('interuption');
         print(e.toString());
       }
@@ -197,6 +209,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     ApbStopPlayerEvent event,
     Emitter<ApbPlayerState> emit,
   ) async {
+    _errorSubscription?.cancel();
     await _audioPlayerService.dispose();
     emit(state.copyWith(status: ApbPlayerStateStatus.stopped));
   }
@@ -277,7 +290,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
         'loopMode': state.loopMode.index,
         'speed': state.speed,
       };
-
     } catch (e) {
       return null;
     }
