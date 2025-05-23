@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../service/service.dart';
 import '../download_item/adm_download_item_bloc.dart';
 part 'adm_download_list_event.dart';
 part 'adm_download_list_state.dart';

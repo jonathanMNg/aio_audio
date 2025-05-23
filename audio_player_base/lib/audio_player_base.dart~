@@ -1,13 +1,13 @@
 import 'package:audio_player_base/src/bloc/apb_player/apb_player_bloc.dart';
 import 'package:audio_player_base/src/bloc/apb_timer/apb_timer_cubit.dart';
+import 'package:audio_player_base/src/model/audio_model.dart';
+import 'package:audio_player_base/src/player/audio_player_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'audio_player_base.dart';
 
 // export 'src/bloc/bloc.dart';
 export 'src/builder/builder.dart';
@@ -32,14 +32,11 @@ class AudioPlayerBase {
   static Future<void> init({
     required String androidNotificationChannelId,
     ApbAudioPositionTrackerCallback? apbAudioPositionTrackerCallback,
-    required ApbPlaylistProvider playlistProvider,
-    required ApbAudioProvider audioProvider,
   }) async {
     GetIt.I.registerLazySingleton<ApbAudioPlayerHandler>(
       () => ApbAudioPlayerHandler(),
     );
     GetIt.I.registerLazySingleton<ApbTimerCubit>(() => ApbTimerCubit());
-    GetIt.I.registerLazySingleton<ApbPlayerBloc>(() => ApbPlayerBloc(playlistProvider: playlistProvider, audioProvider: audioProvider));
     HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory:
           kIsWeb

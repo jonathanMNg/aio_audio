@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../bloc/apb_player/apb_player_bloc.dart';
+
 class ApbProgressWidget extends StatelessWidget {
   const ApbProgressWidget({
     super.key,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../audio_download_manager.dart';
-import '../../bloc/download_item/adm_download_item_bloc.dart';
+import '../../bloc/bloc.dart';
 
 class AdmDownloadListBuilder extends StatelessWidget {
   const AdmDownloadListBuilder({

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../audio_player_base.dart';
+import '../../bloc/apb_player/apb_player_bloc.dart';
 
 class ApbCustomStreamBuilder<T> extends StatelessWidget {
   final Widget Function(BuildContext context) defaultBuilder;
