@@ -16,6 +16,7 @@ abstract class ApbPlayableAudio {
   final String? playlistId;
   final String? name;
   final String? imageUrl;
+  final String? imagePath;
   final String? fileUrl;
   final String? filePath;
   final Duration? position;
@@ -29,6 +30,7 @@ abstract class ApbPlayableAudio {
     this.name,
     this.contributors,
     this.imageUrl,
+    this.imagePath,
     this.fileUrl,
     this.filePath,
     this.position,
