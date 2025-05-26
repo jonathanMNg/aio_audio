@@ -27,6 +27,7 @@ abstract class ApbPlayableAudio {
 
   ApbPlayableAudio({
     this.id,
+    this.sourceId,
     this.name,
     this.contributors,
     this.imageUrl,
@@ -37,7 +38,6 @@ abstract class ApbPlayableAudio {
     this.duration,
     this.fileType,
     this.playlistId,
-    this.sourceId,
     this.createdAt,
   });
 
