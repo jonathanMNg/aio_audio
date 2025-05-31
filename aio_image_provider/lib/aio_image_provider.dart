@@ -4,9 +4,12 @@ export 'src/model/model.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:aio_image_provider/src/helper/helper.dart';
+import 'package:aio_image_provider/src/provider/provider.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'aio_image_provider.dart';
+export 'src/provider/provider.dart';
 
 class AioImageProvider {
   String? saveDirectory;
@@ -21,7 +24,8 @@ class AioImageProvider {
   factory AioImageProvider() => _instance;
 
   // Static method to initialize the class
-  static Future<void> init({String? directoryPath}) async {
+  static Future<void> init({String? directoryPath, required ImageSearchProvider imageSearchProvider}) async {
+    GetIt.I.registerLazySingleton<ImageSearchProvider>(() => imageSearchProvider);
     if(directoryPath != null) {
       final directoryFullPath = '${await _instance._directoryPath}/$directoryPath';
       try {

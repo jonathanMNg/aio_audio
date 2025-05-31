@@ -1,0 +1,1 @@
+export 'src/image_search_provider.dart';
