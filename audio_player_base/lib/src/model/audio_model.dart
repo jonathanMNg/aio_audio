@@ -8,6 +8,7 @@ enum ApbPlayableFileType {
   @JsonValue('file') file,
   @JsonValue('url') url,
   @JsonValue('yt') yt,
+  @JsonValue('unknown') unknown,
   @JsonValue('asset') asset }
 
 abstract class ApbPlayableAudio {
@@ -77,6 +78,7 @@ class ApbPlayablePlaylist {
   final String? id;
   final String? name;
   final String? imageUrl;
+  final String? imagePath;
   final String? desc;
   final List<String>? contributors;
   final bool? shouldHide;
@@ -92,6 +94,7 @@ class ApbPlayablePlaylist {
     this.id,
     this.name,
     this.imageUrl,
+    this.imagePath,
     this.desc,
     this.contributors,
   });
@@ -102,6 +105,7 @@ class ApbPlayablePlaylist {
     String? id,
     String? name,
     String? imageUrl,
+    String? imagePath,
     String? desc,
     List<String>? contributors,
     bool? shouldHide,
@@ -113,6 +117,7 @@ class ApbPlayablePlaylist {
       id: id ?? this.id,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
       desc: desc ?? this.desc,
       contributors: contributors ?? this.contributors,
       shouldHide: shouldHide ?? this.shouldHide,
