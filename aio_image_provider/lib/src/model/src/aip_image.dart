@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aio_image_provider/aio_image_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_google_image/flutter_google_image.dart';
 enum AipImageType { url, file }
@@ -28,5 +29,5 @@ class AipFileImage extends AipImage {
   AipFileImage({required String path}) : super(path: path, url: null, type: AipImageType.file);
 
   @override
-  ImageProvider<Object> get imageProvider => FileImage(File(path!));
+  ImageProvider<Object> get imageProvider => FileImage(File("${AioImageProvider().saveDirectory}/${path!}"));
 }

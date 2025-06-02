@@ -21,7 +21,7 @@ class AipImageWidget extends StatelessWidget {
     switch (image.type) {
       case AipImageType.file:
         return Image.file(
-          File(image.path!),
+          File("${AioImageProvider().saveDirectory}/${image.path!}"),
           fit: fit,
           height: height,
           width: width,
@@ -74,7 +74,7 @@ Widget _buildAipErrorWidget(
   return Container(
     height: height,
     width: width,
-    decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+    decoration: BoxDecoration(border: Border.all(color: Colors.red,), borderRadius: BorderRadius.circular(25)),
     child: Center(child: const Text('Image not found')),
   );
 }
@@ -125,3 +125,5 @@ class AipSquareImageWidget extends StatelessWidget {
     );
   }
 }
+
+
