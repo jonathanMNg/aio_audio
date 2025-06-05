@@ -15,10 +15,6 @@ abstract interface class ApbAudioProvider<T extends ApbPlayableAudio> {
     throw UnimplementedError();
   }
 
-  Future<List<T>> searchAudios(String query) {
-    throw UnimplementedError();
-  }
-
   Future<void> delete(ApbPlayableAudio deletingAudio) {
     throw UnimplementedError();
   }

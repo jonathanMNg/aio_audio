@@ -23,21 +23,16 @@ abstract interface class ApbPlaylistProvider<T extends ApbPlayablePlaylist> {
     throw UnimplementedError();
   }
 
-  Future<void> add(ApbPlayablePlaylist playlist,
+  Future<void> addAudio(String playlistId,
       ApbPlayableAudio audio) {
     throw UnimplementedError();
   }
-  Future<void> insert(int index, ApbPlayablePlaylist playlist,
-      ApbPlayableAudio audio) {
-    throw UnimplementedError();
-  }
-
-  Future<void> addToMultiple(List<String> playlistIds,
+  Future<void> insertAudio(int index, ApbPlayablePlaylist playlist,
       ApbPlayableAudio audio) {
     throw UnimplementedError();
   }
 
-  Future<void> remove(ApbPlayableAudio audio) {
+  Future<void> removeAudio(ApbPlayableAudio audio) {
     throw UnimplementedError();
   }
 }
