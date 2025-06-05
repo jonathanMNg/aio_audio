@@ -32,7 +32,7 @@ abstract interface class ApbPlaylistProvider<T extends ApbPlayablePlaylist> {
     throw UnimplementedError();
   }
 
-  Future<void> addToMultiple(List<ApbPlayablePlaylist> playlistsList,
+  Future<void> addToMultiple(List<String> playlistIds,
       ApbPlayableAudio audio) {
     throw UnimplementedError();
   }

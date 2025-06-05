@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aio_image_provider/aio_image_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_google_image/flutter_google_image.dart';
 enum AipImageType { url, file }
@@ -18,7 +19,7 @@ class AipUrlImage extends AipImage {
   AipUrlImage({required String url}) : super(url: url, path: null, type: AipImageType.url);
 
   @override
-  ImageProvider<Object> get imageProvider => NetworkImage(url!);
+  ImageProvider<Object> get imageProvider => CachedNetworkImageProvider(url!);
 
   Future<bool> get isValidImage {
     return FlutterGoogleImage().isImageLink(url!);

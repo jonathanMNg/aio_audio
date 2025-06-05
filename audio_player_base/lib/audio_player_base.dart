@@ -98,6 +98,14 @@ class AudioPlayerBase {
     GetIt.I<ApbPlayerBloc>().add(ApbPlayAudioEvent(audio));
   }
 
+  static void playCustomSource(ApbPlayableAudio audio, ApbPlayablePlaylist playlist) {
+    GetIt.I<ApbPlayerBloc>().add(ApbPlayCustomSourceEvent(audio: audio, playlist: playlist));
+  }
+
+  static void playPlaylist(ApbPlayablePlaylist playlist) {
+    GetIt.I<ApbPlayerBloc>().add(ApbPlayPlaylistEvent(playlist));
+  }
+
   static void pause() {
     GetIt.I<ApbPlayerBloc>().add(ApbPauseEvent());
   }

@@ -67,14 +67,17 @@ class ApbActiveStreamBuilder<T> extends StatelessWidget {
           case ApbPlayerStateStatus.startUp:
             return startUpBuilder?.call(context, state.initialAudio!) ?? defaultBuilder(context);
           case ApbPlayerStateStatus.loading:
-            return ApbCustomStreamBuilder<int>(
-                defaultBuilder: (context) => defaultBuilder(context),
-                stream: state.playerStream!.currentIndexStream,
-                itemBuilder: (context, currentIndex) {
-                  final currentAudio = state.playlist!.audios![currentIndex];
-                  return loadingBuilder(context, state.playerStream!, state.playlist!, currentAudio);
-                }
-            );
+            return loadingBuilder(context, state.playerStream!, state.playlist!, state.initialAudio!);
+            // return ApbCustomStreamBuilder<int>(
+            //     defaultBuilder: (context) => defaultBuilder(context),
+            //     stream: state.playerStream!.currentIndexStream,
+            //     itemBuilder: (context, currentIndex) {
+            //       // print('inside loading builder $currentIndex');
+            //       // final currentAudio = state.playlist!.audios![currentIndex];
+            //       final currentAudio = state.initialAudio!;
+            //       return loadingBuilder(context, state.playerStream!, state.playlist!, currentAudio);
+            //     }
+            // );
           case ApbPlayerStateStatus.playing:
             return ApbCustomStreamBuilder<int>(
                 defaultBuilder: (context) => defaultBuilder(context),

@@ -7,3 +7,4 @@ export 'src/speed.dart';
 export 'src/skip_forward_backward.dart';
 export 'src/image.dart';
 export 'src/timer.dart';
+export 'src/active_item.dart';

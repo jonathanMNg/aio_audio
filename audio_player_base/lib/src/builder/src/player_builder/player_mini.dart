@@ -22,12 +22,12 @@ class ApbMiniPlayer extends StatelessWidget {
                 ApbProgressWidget(
                   playingBuilder:
                       (context, progress, duration, position) =>
-                      LinearProgressIndicator(value: progress, minHeight: 5,),
+                      LinearProgressIndicator(value: progress, minHeight: 2,),
                   defaultBuilder: (context, progress) {
-                    return LinearProgressIndicator(minHeight: 5, value: progress,);
+                    return LinearProgressIndicator(minHeight: 2, value: progress,);
                   },
                   loadingBuilder: (context) {
-                    return LinearProgressIndicator(minHeight: 5,);
+                    return LinearProgressIndicator(minHeight: 2,);
                   },
                 ),
                 Row(

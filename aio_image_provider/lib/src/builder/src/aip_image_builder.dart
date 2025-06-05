@@ -20,8 +20,9 @@ class AipImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (image.type) {
       case AipImageType.file:
+        final imagePath = image.path!.contains(RegExp('[\\/]')) ? image.path! : "${AioImageProvider().saveDirectory}/${image.path!}";
         return Image.file(
-          File("${AioImageProvider().saveDirectory}/${image.path!}"),
+          File(imagePath),
           fit: fit,
           height: height,
           width: width,

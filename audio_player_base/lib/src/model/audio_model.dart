@@ -5,11 +5,17 @@ import 'package:just_audio_background/just_audio_background.dart';
 part 'audio_model.g.dart';
 
 enum ApbPlayableFileType {
-  @JsonValue('file') file,
-  @JsonValue('url') url,
-  @JsonValue('yt') yt,
-  @JsonValue('unknown') unknown,
-  @JsonValue('asset') asset }
+  @JsonValue('file')
+  file,
+  @JsonValue('url')
+  url,
+  @JsonValue('yt')
+  yt,
+  @JsonValue('unknown')
+  unknown,
+  @JsonValue('asset')
+  asset,
+}
 
 abstract class ApbPlayableAudio {
   final String? id;
@@ -59,7 +65,7 @@ abstract class ApbPlayableAudio {
   }
 
   factory ApbPlayableAudio.fromJson(Map<String, dynamic> json) {
-    switch(json['fileType']) {
+    switch (json['fileType']) {
       case 'url':
         return ApbUrlPlayableAudio.fromJson(json);
       case 'asset':
@@ -72,70 +78,21 @@ abstract class ApbPlayableAudio {
   }
 
   Map<String, dynamic> toJson();
-}
 
-class ApbPlayablePlaylist {
-  final String? id;
-  final String? name;
-  final String? imageUrl;
-  final String? imagePath;
-  final String? desc;
-  final List<String>? contributors;
-  final bool? shouldHide;
-  final List<ApbPlayableAudio>? audios;
-  final DateTime? lastUpdated;
-  final DateTime? lastPlayed;
-
-  ApbPlayablePlaylist({
-    this.shouldHide,
-    this.audios,
-    this.lastUpdated,
-    this.lastPlayed,
-    this.id,
-    this.name,
-    this.imageUrl,
-    this.imagePath,
-    this.desc,
-    this.contributors,
-  });
-
-  int get count => audios?.length ?? 0;
-
-  ApbPlayablePlaylist copyWith({
+  ApbPlayableAudio copyWith({
     String? id,
+    String? sourceId,
+    String? playlistId,
     String? name,
     String? imageUrl,
     String? imagePath,
-    String? desc,
+    String? fileUrl,
+    String? filePath,
+    Duration? position,
+    Duration? duration,
+    DateTime? createdAt,
     List<String>? contributors,
-    bool? shouldHide,
-    List<ApbPlayableAudio>? audios,
-    DateTime? lastUpdated,
-    DateTime? lastPlayed,
-  }) {
-    return ApbPlayablePlaylist(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
-      imagePath: imagePath ?? this.imagePath,
-      desc: desc ?? this.desc,
-      contributors: contributors ?? this.contributors,
-      shouldHide: shouldHide ?? this.shouldHide,
-      audios: audios ?? this.audios,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-      lastPlayed: lastPlayed ?? this.lastPlayed,
-    );
-  }
-
-  DateTime get lastActive =>
-      (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch <
-              _lastUpdated.millisecondsSinceEpoch
-          ? _lastUpdated
-          : lastPlayed!;
-
-  DateTime get _lastUpdated => lastUpdated!;
-
-  String? get contributorsToString => contributors?.join(', ');
+  });
 }
 
 @JsonSerializable(includeIfNull: true)
@@ -165,6 +122,36 @@ class ApbUrlPlayableAudio extends ApbPlayableAudio {
 
   @override
   Map<String, dynamic> toJson() => _$ApbUrlPlayableAudioToJson(this);
+
+  @override
+  ApbPlayableAudio copyWith({
+    String? id,
+    String? sourceId,
+    String? playlistId,
+    String? name,
+    String? imageUrl,
+    String? imagePath,
+    String? fileUrl,
+    String? filePath,
+    Duration? position,
+    Duration? duration,
+    DateTime? createdAt,
+    List<String>? contributors,
+  }) {
+    return ApbUrlPlayableAudio(
+      id: id ?? this.id,
+      sourceId: sourceId ?? this.sourceId,
+      playlistId: playlistId ?? this.playlistId,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
+      fileUrl: fileUrl ?? this.fileUrl,
+      position: position ?? this.position,
+      duration: duration ?? this.duration,
+      createdAt: createdAt ?? this.createdAt,
+      contributors: contributors ?? this.contributors,
+    );
+  }
 }
 
 @JsonSerializable(includeIfNull: true)
@@ -173,7 +160,6 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
     required super.id,
     super.sourceId,
     required super.name,
-    required this.savedDir,
     required super.filePath,
     super.imageUrl,
     super.imagePath,
@@ -186,10 +172,8 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 
   @override
   AudioSource get audioSource {
-    return AudioSource.file('$savedDir/${filePath!}', tag: tag);
+    return AudioSource.file(filePath!, tag: tag);
   }
-
-  final String savedDir;
 
   @override
   factory ApbFilePlayableAudio.fromJson(Map<String, dynamic> json) =>
@@ -197,6 +181,36 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 
   @override
   Map<String, dynamic> toJson() => _$ApbFilePlayableAudioToJson(this);
+
+  @override
+  ApbPlayableAudio copyWith({
+    String? id,
+    String? sourceId,
+    String? playlistId,
+    String? name,
+    String? imageUrl,
+    String? imagePath,
+    String? fileUrl,
+    String? filePath,
+    Duration? position,
+    Duration? duration,
+    DateTime? createdAt,
+    List<String>? contributors,
+  }) {
+    return ApbFilePlayableAudio(
+      id: id ?? this.id,
+      sourceId: sourceId ?? this.sourceId,
+      playlistId: playlistId ?? this.playlistId,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
+      filePath: filePath ?? this.filePath,
+      position: position ?? this.position,
+      duration: duration ?? this.duration,
+      createdAt: createdAt ?? this.createdAt,
+      contributors: contributors ?? this.contributors,
+    );
+  }
 }
 
 @JsonSerializable(includeIfNull: true)
@@ -207,6 +221,7 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
     required super.name,
     required this.assetStr,
     super.imageUrl,
+    super.imagePath,
     super.duration,
     super.position,
     super.contributors,
@@ -231,45 +246,97 @@ class ApbAssetPlayableAudio extends ApbPlayableAudio {
 
   @override
   Map<String, dynamic> toJson() => _$ApbAssetPlayableAudioToJson(this);
+
+  @override
+  ApbPlayableAudio copyWith({
+    String? id,
+    String? sourceId,
+    String? playlistId,
+    String? name,
+    String? imageUrl,
+    String? imagePath,
+    String? fileUrl,
+    String? filePath,
+    Duration? position,
+    Duration? duration,
+    DateTime? createdAt,
+    List<String>? contributors,
+  }) {
+    return ApbAssetPlayableAudio(
+      id: id ?? this.id,
+      sourceId: sourceId ?? this.sourceId,
+      playlistId: playlistId ?? this.playlistId,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
+      position: position ?? this.position,
+      duration: duration ?? this.duration,
+      createdAt: createdAt ?? this.createdAt,
+      contributors: contributors ?? this.contributors,
+      assetStr: '',
+    );
+  }
 }
 
+class ApbPlayablePlaylist {
+  final String? id;
+  final String? name;
+  final String? imageUrl;
+  final String? imagePath;
+  final String? desc;
+  final List<String>? contributors;
+  final bool? shouldHide;
+  final List<ApbPlayableAudio>? audios;
+  final DateTime? lastUpdated;
+  final DateTime? lastPlayed;
 
-// class ApbYtPlayableAudio extends ApbPlayableAudio {
-//   ApbYtPlayableAudio({
-//     required super.id,
-//     super.sourceId,
-//     required super.name,
-//     required this.ytId,
-//     super.imageUrl,
-//     super.lastPosInSec,
-//     super.durationInSec,
-//     super.contributors,
-//     super.playlistId
-//   }): super(fileUrl: null, filePath: null, fileType: ApbPlayableFileType.asset);
-//   @override
-//   AudioSource get audioSource {
-//     return ResolvingYtAudioSource(uniqueId: ytId, resolveSoundUrl: (ytId) async {
-//       Uri? audioUri;
-//       final yt = YtExplodeService().ytExplode;
-//       if (Platform.isIOS) {
-//         final manifest = await yt.videos.streamsClient.getManifest(ytId, ytClients: [YoutubeApiClient.ios]);
-//         final audioManifest = manifest.audio.withHighestBitrate();
-//         final container = audioManifest.container;
-//         if(container.toString() == 'webm') {
-//           audioUri = manifest.muxed.withHighestBitrate().url;
-//         }
-//         else {
-//           audioUri = audioManifest.url;
-//         }
-//       } else {
-//         final manifest = await yt.videos.streamsClient.getManifest(ytId);
-//         final audioManifest = manifest.audioOnly.withHighestBitrate();
-//         audioUri = audioManifest.url;
-//       }
-//
-//       return audioUri;
-//     }, tag: tag);
-//   }
-//   final String ytId;
-//
-// }
+  ApbPlayablePlaylist({
+    this.shouldHide,
+    this.audios,
+    this.lastUpdated,
+    this.lastPlayed,
+    this.id,
+    this.name,
+    this.imageUrl,
+    this.imagePath,
+    this.desc,
+    this.contributors,
+  });
+
+  int get count => audios?.length ?? 0;
+
+  DateTime get lastActive =>
+      (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch <
+              _lastUpdated.millisecondsSinceEpoch
+          ? _lastUpdated
+          : lastPlayed!;
+
+  DateTime get _lastUpdated => lastUpdated!;
+
+  String? get contributorsToString => contributors?.join(', ');
+  ApbPlayablePlaylist copyWith({
+    String? id,
+    String? name,
+    String? imageUrl,
+    String? imagePath,
+    String? desc,
+    List<String>? contributors,
+    bool? shouldHide,
+    List<ApbPlayableAudio>? audios,
+    DateTime? lastUpdated,
+    DateTime? lastPlayed,
+  }) {
+    return ApbPlayablePlaylist(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
+      desc: desc ?? this.desc,
+      contributors: contributors ?? this.contributors,
+      shouldHide: shouldHide ?? this.shouldHide,
+      audios: audios ?? this.audios,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      lastPlayed: lastPlayed ?? this.lastPlayed,
+    );
+  }
+}

@@ -10,17 +10,17 @@ abstract class ApbPlayerEvent extends Equatable {
 class ApbPlayPlaylistEvent extends ApbPlayerEvent {
   final ApbPlayablePlaylist playlist;
   const ApbPlayPlaylistEvent(this.playlist);
-
-  @override
-  List<Object?> get props => [playlist];
 }
 class ApbPlayAudioEvent extends ApbPlayerEvent {
   final ApbPlayableAudio audio;
-
   const ApbPlayAudioEvent(this.audio);
+}
 
-  @override
-  List<Object?> get props => [audio];
+class ApbPlayCustomSourceEvent extends ApbPlayerEvent {
+  final ApbPlayableAudio audio;
+  final ApbPlayablePlaylist playlist;
+
+  const ApbPlayCustomSourceEvent({required this.audio, required this.playlist});
 }
 
 class ApbPauseEvent extends ApbPlayerEvent {
@@ -49,11 +49,7 @@ class ApbReplayEvent extends ApbPlayerEvent {
 
 class ApbSeekEvent extends ApbPlayerEvent {
   final Duration position;
-
   const ApbSeekEvent(this.position);
-
-  @override
-  List<Object?> get props => [position];
 }
 
 class ApbSkipEvent extends ApbPlayerEvent {

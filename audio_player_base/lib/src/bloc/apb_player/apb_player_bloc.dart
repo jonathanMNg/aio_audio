@@ -34,8 +34,16 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
     on<ApbToggleShuffleEvent>(_onToggleShuffle);
     on<ApbInitStartUpEvent>(_onInitStartUp);
     on<ApbAddAudioEvent>(_onAddAudio);
+    on<ApbPlayCustomSourceEvent>(_onPlayCustomSource);
 
     add(ApbInitStartUpEvent());
+  }
+
+  Future<void> _onPlayCustomSource(
+      ApbPlayCustomSourceEvent event,
+    Emitter<ApbPlayerState> emit,
+  ) async {
+    await _handlePlay(emit, audio: event.audio, playlist: event.playlist);
   }
 
   Future<void> _onAddAudio(
@@ -111,33 +119,28 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       ApbPlayablePlaylist? selectedPlaylist;
       List<ApbPlayableAudio> tracks = [];
       int? trackIndex;
-      if (audio != null) {
+      if(audio != null && playlist != null) {
+        selectedAudio = audio;
+        selectedPlaylist = playlist;
+      }
+      else if (audio != null) {
         selectedAudio = await audioProvider.get(audio.id!);
         selectedPlaylist = await playlistProvider.get(
           selectedAudio.playlistId!,
         );
-        emit(
-          state.copyWith(
-            playerStream: playerStream,
-            initialAudio: selectedAudio,
-            playlist: selectedPlaylist,
-            status: ApbPlayerStateStatus.loading,
-          ),
-        );
-        tracks = selectedPlaylist.audios ?? [];
       } else if (playlist != null) {
         selectedAudio = playlist.audios![0];
         selectedPlaylist = playlist;
-        emit(
-          state.copyWith(
-            playerStream: playerStream,
-            initialAudio: selectedAudio,
-            playlist: selectedPlaylist,
-            status: ApbPlayerStateStatus.loading,
-          ),
-        );
-        tracks = selectedPlaylist.audios ?? [];
       }
+      emit(
+        state.copyWith(
+          playerStream: playerStream,
+          initialAudio: selectedAudio,
+          playlist: selectedPlaylist,
+          status: ApbPlayerStateStatus.loading,
+        ),
+      );
+      tracks = selectedPlaylist!.audios ?? [];
       trackIndex = tracks.indexWhere(
         (element) => element.id == selectedAudio!.id,
       );
@@ -169,7 +172,6 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
         } else {
           add(ApbPauseEvent());
         }
-        // print("exception");
       });
     } on PlayerException catch (e) {
       if (kDebugMode) {

@@ -13,6 +13,7 @@ ApbUrlPlayableAudio _$ApbUrlPlayableAudioFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       fileUrl: json['fileUrl'] as String?,
       imageUrl: json['imageUrl'] as String?,
+      imagePath: json['imagePath'] as String?,
       position:
           json['position'] == null
               ? null
@@ -40,6 +41,7 @@ Map<String, dynamic> _$ApbUrlPlayableAudioToJson(
   'playlistId': instance.playlistId,
   'name': instance.name,
   'imageUrl': instance.imageUrl,
+  'imagePath': instance.imagePath,
   'fileUrl': instance.fileUrl,
   'position': instance.position?.inMicroseconds,
   'duration': instance.duration?.inMicroseconds,
@@ -53,9 +55,9 @@ ApbFilePlayableAudio _$ApbFilePlayableAudioFromJson(
   id: json['id'] as String?,
   sourceId: json['sourceId'] as String?,
   name: json['name'] as String?,
-  savedDir: json['savedDir'] as String,
   filePath: json['filePath'] as String?,
   imageUrl: json['imageUrl'] as String?,
+  imagePath: json['imagePath'] as String?,
   position:
       json['position'] == null
           ? null
@@ -83,12 +85,12 @@ Map<String, dynamic> _$ApbFilePlayableAudioToJson(
   'playlistId': instance.playlistId,
   'name': instance.name,
   'imageUrl': instance.imageUrl,
+  'imagePath': instance.imagePath,
   'filePath': instance.filePath,
   'position': instance.position?.inMicroseconds,
   'duration': instance.duration?.inMicroseconds,
   'createdAt': instance.createdAt?.toIso8601String(),
   'contributors': instance.contributors,
-  'savedDir': instance.savedDir,
 };
 
 ApbAssetPlayableAudio _$ApbAssetPlayableAudioFromJson(
@@ -99,6 +101,7 @@ ApbAssetPlayableAudio _$ApbAssetPlayableAudioFromJson(
   name: json['name'] as String?,
   assetStr: json['assetStr'] as String,
   imageUrl: json['imageUrl'] as String?,
+  imagePath: json['imagePath'] as String?,
   duration:
       json['duration'] == null
           ? null
@@ -126,6 +129,7 @@ Map<String, dynamic> _$ApbAssetPlayableAudioToJson(
   'playlistId': instance.playlistId,
   'name': instance.name,
   'imageUrl': instance.imageUrl,
+  'imagePath': instance.imagePath,
   'position': instance.position?.inMicroseconds,
   'duration': instance.duration?.inMicroseconds,
   'createdAt': instance.createdAt?.toIso8601String(),
