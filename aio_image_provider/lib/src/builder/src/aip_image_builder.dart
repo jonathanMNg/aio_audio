@@ -76,7 +76,7 @@ Widget _buildAipErrorWidget(
     height: height,
     width: width,
     decoration: BoxDecoration(border: Border.all(color: Colors.red,), borderRadius: BorderRadius.circular(25)),
-    child: Center(child: const Text('Image not found')),
+    child: Center(child: const Text('Image not found', style: TextStyle(fontSize: 12,),textAlign: TextAlign.center,)),
   );
 }
 
