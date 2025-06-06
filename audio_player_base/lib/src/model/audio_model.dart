@@ -305,6 +305,9 @@ class ApbPlayablePlaylist {
 
   int get count => audios?.length ?? 0;
 
+  Duration get duration => audios?.fold(Duration.zero, (previousValue, element)
+  => Duration(seconds: (previousValue?.inSeconds??0) + (element.duration?.inSeconds ?? 0))) ?? Duration.zero;
+
   DateTime get lastActive =>
       (lastPlayed ?? DateTime(2000)).millisecondsSinceEpoch <
               _lastUpdated.millisecondsSinceEpoch
