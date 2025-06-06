@@ -173,7 +173,7 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 
   @override
   AudioSource get audioSource {
-    return AudioSource.file('${AudioPlayerBase().saveDirectory}/$filePath!}', tag: tag);
+    return AudioSource.file('${AudioPlayerBase().saveDirectory}/${filePath!}', tag: tag);
   }
 
   @override

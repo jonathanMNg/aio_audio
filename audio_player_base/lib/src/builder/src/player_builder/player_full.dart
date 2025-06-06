@@ -59,7 +59,7 @@ class ApbFullPlayer extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  audio.name!,
+                                  playlist.name!,
                                   style: Theme.of(context).textTheme.titleMedium,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -91,23 +91,23 @@ class ApbFullPlayer extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // SizedBox(
+                                  //   height: 25,
+                                  //   child: Text(
+                                  //     playlist.name!,
+                                  //     style:
+                                  //         Theme.of(context).textTheme.titleMedium,
+                                  //     maxLines: 1,
+                                  //     overflow: TextOverflow.ellipsis,
+                                  //   ),
+                                  // ),
                                   SizedBox(
-                                    height: 25,
-                                    child: Text(
-                                      playlist.name!,
-                                      style:
-                                          Theme.of(context).textTheme.titleMedium,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
+                                    height: 45,
                                     child: Text(
                                       audio.name!,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
-                                      maxLines: 1,
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -115,13 +115,13 @@ class ApbFullPlayer extends StatelessWidget {
                                     audio.contributorsToString ?? '',
                                     style: Theme.of(context).textTheme.bodySmall,
                                   ),
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 15),
                                   SizedBox(
                                     height: 30,
                                     child: ApbReactiveProgressWidget(),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(bottom: 15),
+                                    padding: EdgeInsets.only(bottom: 5),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
@@ -186,7 +186,7 @@ class ApbFullPlayer extends StatelessWidget {
                                             ApbNextWidget(),
                                           ],
                                         ),
-                                        SizedBox(height: 25),
+                                        SizedBox(height: 15),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

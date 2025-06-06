@@ -88,6 +88,7 @@ class ApbAudioPlayerHandler {
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
     for (final audio in audios) {
+      print('${AudioPlayerBase().saveDirectory}/${audio.filePath}');
       _playlist.add(audio);
     }
   }
