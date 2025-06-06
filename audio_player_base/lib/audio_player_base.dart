@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_player_base/src/bloc/apb_player/apb_player_bloc.dart';
 import 'package:audio_player_base/src/bloc/apb_timer/apb_timer_cubit.dart';
 import 'package:flutter/foundation.dart';
@@ -23,6 +25,7 @@ typedef ApbAudioPositionTrackerCallback =
     void Function(String audioId, Duration position, Duration duration);
 
 class AudioPlayerBase {
+  String? _saveDirectory;
   AudioPlayerBase._internal();
 
   static final AudioPlayerBase _instance = AudioPlayerBase._internal();
@@ -30,11 +33,27 @@ class AudioPlayerBase {
   factory AudioPlayerBase() => _instance;
 
   static Future<void> init({
+    String? saveDirectory,
     required String androidNotificationChannelId,
     ApbAudioPositionTrackerCallback? apbAudioPositionTrackerCallback,
     required ApbPlaylistProvider playlistProvider,
     required ApbAudioProvider audioProvider,
   }) async {
+
+    if (saveDirectory != null) {
+      final directoryFullPath =
+          '${await _instance._directoryPath}/$saveDirectory';
+      try {
+        await Directory(directoryFullPath).create(recursive: true);
+        _instance._saveDirectory = directoryFullPath;
+      } catch (e) {
+        throw Exception(
+          'Failed to create directory: $e. Make sure the directory path is valid and not exist.',
+        );
+      }
+    } else {
+      _instance._saveDirectory = await _instance._directoryPath;
+    }
     GetIt.I.registerLazySingleton<ApbAudioPlayerHandler>(
       () => ApbAudioPlayerHandler(),
     );
@@ -122,4 +141,21 @@ class AudioPlayerBase {
     GetIt.I<ApbPlayerBloc>().add(ApbResumeEvent());
   }
 
+  String get saveDirectory {
+    _ensureInitialized();
+    return _saveDirectory!;
+  }
+
+  void _ensureInitialized() {
+    if (_instance._saveDirectory == null) {
+      throw Exception(
+        'AioImageProvider is not initialized. Call AioImageProvider.init() first.',
+      );
+    }
+  }
+
+  Future<String> get _directoryPath async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
 }

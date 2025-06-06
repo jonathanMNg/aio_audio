@@ -1,3 +1,4 @@
+import 'package:audio_player_base/audio_player_base.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -172,7 +173,7 @@ class ApbFilePlayableAudio extends ApbPlayableAudio {
 
   @override
   AudioSource get audioSource {
-    return AudioSource.file(filePath!, tag: tag);
+    return AudioSource.file('${AudioPlayerBase().saveDirectory}/$filePath!}', tag: tag);
   }
 
   @override
