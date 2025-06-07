@@ -19,9 +19,11 @@ class ApbPlayerWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [child, ApbPlayerWidget(config: config,)],
+    return Scaffold(
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [child, ApbPlayerWidget(config: config,)],
+      ),
     );
   }
 }

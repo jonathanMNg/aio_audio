@@ -5,6 +5,7 @@ import 'package:audio_player_base/src/builder/src/player_builder/draggable_scrol
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_just_marquee/flutter_just_marquee.dart';
 
 import '../../../bloc/apb_player/apb_player_bloc.dart';
 
