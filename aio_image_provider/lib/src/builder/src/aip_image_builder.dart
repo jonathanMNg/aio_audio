@@ -61,6 +61,22 @@ class AipImageWidget extends StatelessWidget {
             );
           },
         );
+      case AipImageType.asset:
+        return Image.asset(
+          image.assetName!,
+          height: height,
+          width: width,
+          fit: fit,
+          errorBuilder: (context, error, stackTrace) {
+            return _buildAipErrorWidget(
+              context,
+              error,
+              stackTrace,
+              height,
+              width,
+            );
+          },
+        );
     }
   }
 }

@@ -106,7 +106,7 @@ class ApbFullPlayer extends StatelessWidget {
                                   height: 30,
                                   pauseAfterRound: Duration(seconds: 3),
                                   startAfter: Duration(seconds: 3),
-                                  velocity: 150,
+                                  velocity: 100,
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
