@@ -1,12 +1,15 @@
 export 'src/builder/builder.dart';
 export 'src/model/model.dart';
 
+import 'package:aio_image_provider/src/helper/src/bytes.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:aio_image_provider/src/helper/helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 import 'aio_image_provider.dart';
 export 'src/provider/provider.dart';
 
@@ -125,6 +128,27 @@ class AioImageProvider {
         else {
           onError?.call(Exception('Temp image not found ${tempImage.path}'));
         }
+      }
+    }
+  }
+
+  Future<void> saveUint8ListImage(
+        Uint8List imageData, {
+        Function(String filePath)? onSuccess,
+        Function(Object error)? onError,
+      }) async {
+    _ensureInitialized();
+    final extension = getUint8ListImageExtension(imageData);
+    if (extension == null) {
+      onError?.call(Exception('Extension not found'));
+    } else {
+      final newFileName = '${Uuid().v4()}.$extension';
+      try {
+        final newFile = await saveUint8ListToImage(imageData, "$saveDirectory/$newFileName");
+        onSuccess?.call(newFile.path);
+      }
+      catch (e) {
+        onError?.call(Exception('Temp image not found $saveDirectory/$newFileName'));
       }
     }
   }

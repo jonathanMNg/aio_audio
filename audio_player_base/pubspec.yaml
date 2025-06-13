@@ -26,6 +26,8 @@ dependencies:
   path_provider: ^2.1.5
   http: ^1.4.0
   flutter_just_marquee: ^1.0.0
+  aio_image_provider:
+    path: ../aio_image_provider
 
 dev_dependencies:
   flutter_lints: ^5.0.0

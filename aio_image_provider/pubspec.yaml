@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   file_picker: ^10.1.9
+  uuid: ^4.5.1
   http: ^1.4.0
   path_provider: ^2.1.5
   flutter_google_image:

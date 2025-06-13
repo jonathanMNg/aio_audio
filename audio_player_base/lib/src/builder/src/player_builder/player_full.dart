@@ -22,7 +22,10 @@ class ApbFullPlayer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: CachedNetworkImageProvider(audio.imageUrl!),
+          image: audio.imagePath != null
+              ? AipFileImage(path: audio.imagePath!).imageProvider
+              : AipUrlImage(url: audio.imageUrl ?? '').imageProvider,
+          // image: CachedNetworkImageProvider(audio.imageUrl!),
           fit: BoxFit.fill,
         ),
       ),
@@ -75,11 +78,12 @@ class ApbFullPlayer extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: ApbCachedImageBuilder(
-                              imageUrl: audio.imageUrl!,
-                              width: getMaxImgSize(context),
-                              height: getMaxImgSize(context),
-                            ),
+                            child: ApbImageWidget(audio: audio, size: getMaxImgSize(context)),
+                            // child: ApbCachedImageBuilder(
+                            //   imageUrl: audio.imageUrl!,
+                            //   width: getMaxImgSize(context),
+                            //   height: getMaxImgSize(context),
+                            // ),
                           ),
                           SizedBox(
                             height:

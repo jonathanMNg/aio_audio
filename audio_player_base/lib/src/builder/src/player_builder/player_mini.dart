@@ -33,10 +33,12 @@ class ApbMiniPlayer extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ApbCachedImageBuilder(
-                      imageUrl: audio.imageUrl!,
-                      height: getPixelFromPercentage(context, playerMinHeightPercentage) - 5,
-                    ),
+                    // ApbCachedImageBuilder(
+                    //   imageUrl: audio.imageUrl!,
+                    //   height: getPixelFromPercentage(context, playerMinHeightPercentage) - 5,
+                    // ),
+
+                    ApbImageWidget(audio: audio, size: getPixelFromPercentage(context, playerMinHeightPercentage) - 5),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10),
