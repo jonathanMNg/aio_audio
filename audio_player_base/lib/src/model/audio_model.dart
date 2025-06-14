@@ -1,3 +1,4 @@
+import 'package:aio_image_provider/aio_image_provider.dart';
 import 'package:audio_player_base/audio_player_base.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:just_audio/just_audio.dart';
@@ -55,7 +56,7 @@ abstract class ApbPlayableAudio {
     id: sourceId ?? id!,
     title: name!,
     artist: contributorsToString,
-    artUri: imageUrl != null ? Uri.parse(imageUrl!) : null,
+    artUri: imagePath != null ? Uri.file('${AioImageProvider().saveDirectory}/${imagePath!}') : imageUrl != null ? Uri.parse(imageUrl!) : null,
   );
 
   String? get contributorsToString => contributors?.join(', ');
