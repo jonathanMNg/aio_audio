@@ -15,3 +15,8 @@ final class InitSearchImages extends SearchImageScreenEvent {
 final class FetchMoreImages extends SearchImageScreenEvent {
   const FetchMoreImages();
 }
+
+final class SearchImagesEvent extends SearchImageScreenEvent {
+  final String query;
+  const SearchImagesEvent(this.query);
+}

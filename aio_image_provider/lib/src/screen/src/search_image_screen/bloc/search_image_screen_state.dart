@@ -1,10 +1,10 @@
 part of 'search_image_screen_bloc.dart';
 
-enum SearchImageScreenLoadStatus { loading, loaded, error }
+enum SearchImageScreenLoadStatus {initial, loading, loaded, error }
 
 class SearchImageScreenState extends Equatable {
   const SearchImageScreenState({
-    this.status = SearchImageScreenLoadStatus.loading,
+    this.status = SearchImageScreenLoadStatus.initial,
     this.hasMore = true,
     this.resultUrls = const [],
   });

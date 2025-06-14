@@ -13,13 +13,11 @@ class SearchImageScreenBloc
   final String searchKey;
   final ImageSearchProvider imageSearchProvider = GetIt.I<ImageSearchProvider>();
   SearchImageScreenBloc(this.searchKey) : super(const SearchImageScreenState()) {
-    on<SearchImageScreenEvent>((event, emit) {
-
-    });
     on<InitSearchImages>(_onInitSearchImagesEvent);
     on<FetchMoreImages>(_onFetchMoreImagesEvent);
+    on<SearchImagesEvent>(_onSearchImagesEvent);
 
-    add(InitSearchImages(searchKey));
+    // add(InitSearchImages(searchKey));
 
   }
 
@@ -36,6 +34,12 @@ class SearchImageScreenBloc
     else {
       emit(state.copyWith(resultUrls: [...state.resultUrls, ...resultUrls]));
     }
+  }
+
+  Future<void> _onSearchImagesEvent(SearchImagesEvent event, Emitter<SearchImageScreenState> emit) async {
+    emit(state.copyWith(status: SearchImageScreenLoadStatus.loading));
+    final resultUrls = await imageSearchProvider.searchImages(event.query);
+    emit(state.copyWith(status: SearchImageScreenLoadStatus.loaded, resultUrls: resultUrls));
   }
 
   @override
