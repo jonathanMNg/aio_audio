@@ -145,7 +145,7 @@ class AioImageProvider {
       final newFileName = '${Uuid().v4()}.$extension';
       try {
         final newFile = await saveUint8ListToImage(imageData, "$saveDirectory/$newFileName");
-        onSuccess?.call(newFile.path);
+        onSuccess?.call(newFileName);
       }
       catch (e) {
         onError?.call(Exception('Temp image not found $saveDirectory/$newFileName'));
