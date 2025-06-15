@@ -1,4 +1,5 @@
 import 'package:audio_player_base/audio_player_base.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 
@@ -88,7 +89,9 @@ class ApbAudioPlayerHandler {
 
   Future<void> initPlaylist({required List<ApbPlayableAudio> audios}) async {
     for (final audio in audios) {
-      print('${AudioPlayerBase().saveDirectory}/${audio.filePath}');
+      if(kDebugMode) {
+        // print('${AudioPlayerBase().saveDirectory}/${audio.filePath}');
+      }
       _playlist.add(audio);
     }
   }
