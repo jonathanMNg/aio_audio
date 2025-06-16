@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:audio_player_base/src/model/audio_model.dart';
 import 'package:audio_player_base/src/player/audio_player_handler.dart';
 import 'package:audio_player_base/src/repository/src/audio_provider.dart';
@@ -120,8 +121,9 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
       List<ApbPlayableAudio> tracks = [];
       int? trackIndex;
       if(audio != null && playlist != null) {
-        selectedAudio = audio;
         selectedPlaylist = playlist;
+        tracks = selectedPlaylist.audios ?? [];
+        selectedAudio = audio;
       }
       else if (audio != null) {
         selectedAudio = await audioProvider.get(audio.id!);
@@ -129,8 +131,10 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
           selectedAudio.playlistId!,
         );
       } else if (playlist != null) {
-        selectedAudio = playlist.audios![0];
         selectedPlaylist = playlist;
+        tracks = selectedPlaylist.audios ?? [];
+        trackIndex = Random().nextInt(tracks.length - 1);
+        selectedAudio = playlist.audios![trackIndex];
       }
       emit(
         state.copyWith(
@@ -140,10 +144,9 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
           status: ApbPlayerStateStatus.loading,
         ),
       );
-      tracks = selectedPlaylist!.audios ?? [];
-      trackIndex = tracks.indexWhere(
-        (element) => element.id == selectedAudio!.id,
-      );
+      trackIndex ??= tracks.indexWhere(
+              (element) => element.id == selectedAudio!.id,
+        );
       await _audioPlayerService.initPlaylist(audios: tracks);
       Duration initialPos = selectedAudio!.position ?? Duration.zero;
       if (initialPos.inSeconds + 10 >=
