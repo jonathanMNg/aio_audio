@@ -11,10 +11,13 @@ class ApbPlayPauseWidget extends StatelessWidget {
     required this.pauseWidget,
     required this.loadingWidget,
     required this.replayWidget,
-    required this.resumeWidget, this.audio,
+    required this.resumeWidget,
+    this.audio,
+    this.playlist
   });
 
   final ApbPlayableAudio? audio;
+  final ApbPlayablePlaylist? playlist;
   final Widget playWidget;
   final Widget resumeWidget;
   final Widget pauseWidget;
@@ -24,9 +27,9 @@ class ApbPlayPauseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ApbActiveStreamBuilder(
-      loadingBuilder: (context, psStream, playlist, loadingAudio) {
-        if(audio != null) {
-          if(audio?.id == loadingAudio.id) {
+      loadingBuilder: (context, psStream, loadingPlaylist, loadingAudio) {
+        if(audio != null || playlist != null) {
+          if(audio?.id == loadingAudio.id || playlist?.id == loadingPlaylist.id) {
             return loadingWidget;
           }
           else {
@@ -40,7 +43,7 @@ class ApbPlayPauseWidget extends StatelessWidget {
       defaultBuilder: (context) {
         return playWidget;
       },
-      playingBuilder: (context, psStream, playlist, playingAudio) {
+      playingBuilder: (context, psStream, playingPlaylist, playingAudio) {
         final child = ApbCustomStreamBuilder<PlayerState>(
           defaultBuilder: (context) => loadingWidget,
           stream: psStream.playerStateStream,
@@ -66,8 +69,8 @@ class ApbPlayPauseWidget extends StatelessWidget {
             return playWidget;
           },
         );
-        if(audio != null) {
-          if(audio?.id == playingAudio.id) {
+        if(audio != null || playlist != null) {
+          if(audio?.id == playingAudio.id || playlist?.id == playingPlaylist.id) {
             return child;
           }
           else {
