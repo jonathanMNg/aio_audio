@@ -130,6 +130,7 @@ class ApbPlayerBloc extends HydratedBloc<ApbPlayerEvent, ApbPlayerState> {
         selectedPlaylist = await playlistProvider.get(
           selectedAudio.playlistId!,
         );
+        tracks = selectedPlaylist.audios ?? [];
       } else if (playlist != null) {
         selectedPlaylist = playlist;
         tracks = selectedPlaylist.audios ?? [];
