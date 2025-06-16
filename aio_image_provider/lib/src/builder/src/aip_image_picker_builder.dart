@@ -112,7 +112,7 @@ class AipImagePickerWidget extends AipImagePickerBuilder {
                     MaterialPageRoute(
                       builder:
                           (context) =>
-                              SearchImageScreenPage(searchKey: query ?? 'Best Playlist'),
+                              SearchImageScreenPage(searchKey: query ?? ''),
                     ),
                   );
                   onSearchImage(imageUrl!);

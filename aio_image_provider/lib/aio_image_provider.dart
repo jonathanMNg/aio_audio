@@ -69,26 +69,23 @@ class AioImageProvider {
     if (extension == null) {
       onError?.call(Exception('Extension not found for ${image.url}'));
     } else {
-      if (await image.isValidImage) {
-        try {
-          final response = await http.get(Uri.parse(image.url!));
-          if (response.statusCode == 200) {
-            final newFileName = "${getUuidFromString(image.url!)}.$extension";
-            final file = File("$saveDirectory/$newFileName");
-            if (await file.exists()) {
-              onSuccess?.call(newFileName);
-            } else {
-              await file.writeAsBytes(response.bodyBytes);
-              onSuccess?.call(newFileName);
-            }
+
+      try {
+        final response = await http.get(Uri.parse(image.url!));
+        if (response.statusCode == 200) {
+          final newFileName = "${getUuidFromString(image.url!)}.$extension";
+          final file = File("$saveDirectory/$newFileName");
+          if (await file.exists()) {
+            onSuccess?.call(newFileName);
           } else {
-            onError?.call(Exception('Failed to download image'));
+            await file.writeAsBytes(response.bodyBytes);
+            onSuccess?.call(newFileName);
           }
-        } catch (e) {
-          onError?.call(e);
+        } else {
+          onError?.call(Exception('Failed to download image'));
         }
-      } else {
-        onError?.call(Exception('Invalid image'));
+      } catch (e) {
+        onError?.call(e);
       }
     }
   }

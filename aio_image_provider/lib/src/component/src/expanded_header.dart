@@ -44,14 +44,15 @@ class BaseExpandedHeader extends StatelessWidget {
 
 class ImageSearchExpandedHeader extends BaseExpandedHeader {
   ImageSearchExpandedHeader({super.key, required this.titleText, super.leading, super.actions, required this.controller, this.onSubmitted,
-    required this.onChanged, this.onClear})
+    required this.onChanged, this.onClear, this.initialValue})
       : super(title: Text(titleText), expandedTitle: Text(titleText, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 18,)),
-    subtitle: ImageSearchField(controller: controller, onChanged: onChanged, onSubmitted: onSubmitted, onClear: onClear,),
+    subtitle: ImageSearchField(controller: controller, onChanged: onChanged, onSubmitted: onSubmitted, onClear: onClear, value: initialValue,),
   );
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final Function()? onClear;
   final String titleText;
+  final String? initialValue;
   final TextEditingController? controller;
 }
 
@@ -138,9 +139,9 @@ class _ImageSearchFieldState extends State<ImageSearchField> {
     super.initState();
     focusNode = FocusNode();
     textEditingController = widget.controller ?? TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(focusNode);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   FocusScope.of(context).requestFocus(focusNode);
+    // });
     focusNode.addListener(() {
       if(focusNode.hasFocus) {
         setState(() {

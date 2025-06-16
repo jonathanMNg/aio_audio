@@ -7,7 +7,6 @@ import '../../../screen.dart';
 
 class SearchImageScreenPage extends StatelessWidget {
   const SearchImageScreenPage({super.key, required this.searchKey});
-
   final String searchKey;
 
   @override
@@ -37,18 +36,22 @@ class _SearchImageScreenViewState extends State<SearchImageScreenView> {
     super.initState();
     _scrollController = ScrollController();
     _textEditingController = TextEditingController();
+    _textEditingController.text = widget.searchKey;
     _scrollController.addListener(_onScroll);
+    context.read<SearchImageScreenBloc>().add(
+      InitSearchImages(widget.searchKey),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text('Searching for ${widget.searchKey}')),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
           ImageSearchExpandedHeader(
             titleText: 'Image Search',
+            initialValue: widget.searchKey,
             controller: _textEditingController,
             onChanged: (query) {},
             onSubmitted: (query) {
@@ -122,8 +125,9 @@ class _SearchImageScreenViewState extends State<SearchImageScreenView> {
   }
 
   void _onScroll() {
-    if (_isBottom)
+    if (_isBottom) {
       context.read<SearchImageScreenBloc>().add(const FetchMoreImages());
+    }
   }
 
   bool get _isBottom {

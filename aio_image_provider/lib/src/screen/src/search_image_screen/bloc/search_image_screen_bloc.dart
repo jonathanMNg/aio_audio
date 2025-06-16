@@ -22,6 +22,7 @@ class SearchImageScreenBloc
   }
 
   Future<void> _onInitSearchImagesEvent(InitSearchImages event, Emitter<SearchImageScreenState> emit) async {
+    emit(state.copyWith(status: SearchImageScreenLoadStatus.loading));
     final initialResults = await imageSearchProvider.searchImages(event.query);
     emit(state.copyWith(status: SearchImageScreenLoadStatus.loaded, resultUrls: initialResults));
   }
